@@ -7,6 +7,7 @@
 <!--Script><-->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
+
 	var canvasOptions = {
 		height: '560px',
 		width: '1120px',
@@ -25,12 +26,22 @@
 									.attr('width', canvasOptions.width)
 									.style('background-color', canvasOptions.color);
 
-	canvas.append('svg:circle')
+	var ball = canvas.append('svg:circle')
 		.attr('class', 'cueBall')
 		.attr('cx', cueBall.cx)
 		.attr('cy', cueBall.cy)
 		.attr('r', cueBall.radius)
 		.style('fill', cueBall.color)
+
+	canvas.on('click', () => {
+		var x = d3.mouse(this.canvas._groups[0][0])[0];
+		var y = d3.mouse(this.canvas._groups[0][0])[1];
+		var originX = this.ball._groups[0][0].cx.animVal.value;
+		var originY = this.ball._groups[0][0].cy.animVal.value
+		var diffX = x - originX;
+		var diffY = y - originY;
+		console.log(diffX, diffY)
+	})
 
 </script>
 </body>
