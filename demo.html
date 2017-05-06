@@ -38,9 +38,12 @@
 		var y = d3.mouse(this.canvas._groups[0][0])[1];
 		var originX = this.ball._groups[0][0].cx.animVal.value;
 		var originY = this.ball._groups[0][0].cy.animVal.value
-		var diffX = x - originX;
-		var diffY = y - originY;
-		console.log(diffX, diffY)
+		var diffX = x + originX;
+		var diffY = y + originY;
+		//translate
+		var i = d3.select('.cueBall').transition()
+			.attr('cx', x)
+			.attr('cy', y)
 	})
 
 </script>
