@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<div id="container">
+	</div>
+
+<!--Script><-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+	var canvasOptions = {
+		height: '560px',
+		width: '1120px',
+		color: '#009900'
+	}
+
+	var cueBall = {
+		radius: '16.25px',
+		cx: '280',
+		cy: '280',
+		color: 'white'
+	}
+
+	var canvas = d3.select('#container').append('svg:svg')
+									.attr('height', canvasOptions.height)
+									.attr('width', canvasOptions.width)
+									.style('background-color', canvasOptions.color);
+
+	canvas.append('svg:circle')
+		.attr('class', 'cueBall')
+		.attr('cx', cueBall.cx)
+		.attr('cy', cueBall.cy)
+		.attr('r', cueBall.radius)
+		.style('fill', cueBall.color)
+
+</script>
+</body>
+</html>
