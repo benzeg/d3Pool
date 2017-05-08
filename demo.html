@@ -8,17 +8,37 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
+  //game container
 	var canvasOptions = {
 		height: '560px',
 		width: '1120px',
 		color: '#009900'
 	}
 
-	var cueBall = {
+	//balls
+	var cueBallStyle = {
 		radius: '16.25px',
 		cx: '280',
 		cy: '280',
 		color: 'white'
+	}
+
+	//power grid
+		//container
+	var powerGridContainerStyle = {
+		height: '240px',
+		width: '20px',
+		x: '1080',
+		y: '40',
+		color: '#ffffff'
+	}
+		//grid
+	var powerGridStyle = {
+		height: '0px',
+		width: '20px',
+		x: '1080',
+		y: '40',
+		color: '#8c5555'
 	}
 
 	var canvas = d3.select('#container').append('svg:svg')
@@ -26,40 +46,56 @@
 									.attr('width', canvasOptions.width)
 									.style('background-color', canvasOptions.color);
 
-  //force bar
-
-
 	//player ball
-	var ball = canvas.append('svg:circle')
+	var cueBall = canvas.append('svg:circle')
 		.attr('class', 'cueBall')
-		.attr('cx', cueBall.cx)
-		.attr('cy', cueBall.cy)
-		.attr('r', cueBall.radius)
-		.style('fill', cueBall.color)
+		.attr('cx', cueBallStyle.cx)
+		.attr('cy', cueBallStyle.cy)
+		.attr('r', cueBallStyle.radius)
+		.style('fill', cueBallStyle.color);
 
+	//power grid
+		//container
+	var powerGridContainer = canvas.append('svg:rect')
+		.attr('class', 'powerGridContainer')
+		.attr('height', powerGridContainerStyle.height)
+		.attr('width', powerGridContainerStyle.width)
+		.attr('x', powerGridContainerStyle.x)
+		.attr('y', powerGridContainerStyle.y)
+		.style('fill', powerGridContainerStyle.color);
 
-	var mousedown = false;
-	var timer = 0;
+		//grid
+	var powerGrid = canvas.append('svg:rect')
+		.attr('class', 'powerGrid')
+		.attr('height', powerGridStyle.height)
+		.attr('width', powerGridStyle.width)
+		.attr('x', powerGridStyle.x)
+		.attr('y', powerGridStyle.y)
+		.style('fill', powerGridStyle.color);
 
 	canvas.on('mousedown', () => {
 		var x = d3.mouse(this.canvas._groups[0][0])[0];
 		var y = d3.mouse(this.canvas._groups[0][0])[1];
-		var originX = this.ball._groups[0][0].cx.animVal.value;
-		var originY = this.ball._groups[0][0].cy.animVal.value
+		var originX = this.cueBall._groups[0][0].cx.animVal.value;
+		var originY = this.cueBall._groups[0][0].cy.animVal.value
 		var diffX = x + originX;
 		var diffY = y + originY;
+		this.powerBarHeight = this.powerGridStyle.height.slice(0, this.powerGridStyle.height.length -2);
 		//translate
 		// var i = d3.select('.cueBall').transition()
 		// 	.attr('cx', x)
 		// 	.attr('cy', y)
 
 		this.inCue = setInterval(function() {
-			timer++;
-			console.log(timer);
+			this.powerBarHeight++;
+
+			//increase powerGrid height
+			if (this.powerBarHeight % 5 === 0) {
+				this.powerGrid.attr('height', this.powerBarHeight);
+			}
 		}, 10);
 	}).on('mouseup', () => {
 		clearInterval(this.inCue);
-		console.log(timer);
 	});
 
 </script>
