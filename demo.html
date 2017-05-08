@@ -26,6 +26,10 @@
 									.attr('width', canvasOptions.width)
 									.style('background-color', canvasOptions.color);
 
+  //force bar
+
+
+	//player ball
 	var ball = canvas.append('svg:circle')
 		.attr('class', 'cueBall')
 		.attr('cx', cueBall.cx)
@@ -33,7 +37,11 @@
 		.attr('r', cueBall.radius)
 		.style('fill', cueBall.color)
 
-	canvas.on('click', () => {
+
+	var mousedown = false;
+	var timer = 0;
+
+	canvas.on('mousedown', () => {
 		var x = d3.mouse(this.canvas._groups[0][0])[0];
 		var y = d3.mouse(this.canvas._groups[0][0])[1];
 		var originX = this.ball._groups[0][0].cx.animVal.value;
@@ -41,10 +49,18 @@
 		var diffX = x + originX;
 		var diffY = y + originY;
 		//translate
-		var i = d3.select('.cueBall').transition()
-			.attr('cx', x)
-			.attr('cy', y)
-	})
+		// var i = d3.select('.cueBall').transition()
+		// 	.attr('cx', x)
+		// 	.attr('cy', y)
+
+		this.inCue = setInterval(function() {
+			timer++;
+			console.log(timer);
+		}, 10);
+	}).on('mouseup', () => {
+		clearInterval(this.inCue);
+		console.log(timer);
+	});
 
 </script>
 </body>
