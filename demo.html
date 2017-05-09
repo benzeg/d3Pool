@@ -76,11 +76,12 @@
 	canvas.on('mousedown', () => {
 		var x = d3.mouse(this.canvas._groups[0][0])[0];
 		var y = d3.mouse(this.canvas._groups[0][0])[1];
-		var originX = this.cueBall._groups[0][0].cx.animVal.value;
-		var originY = this.cueBall._groups[0][0].cy.animVal.value
-		var diffX = x + originX;
-		var diffY = y + originY;
-		this.powerBarHeight = this.powerGridStyle.height.slice(0, this.powerGridStyle.height.length -2);
+		this.originX = this.cueBall._groups[0][0].cx.animVal.value;
+		this.originY = this.cueBall._groups[0][0].cy.animVal.value
+		this.diffX = x - originX;
+		this.diffY = y - originY;
+
+		this.powerBarHeight = parseInt(this.powerGridStyle.height.slice(0, this.powerGridStyle.height.length -2), 10);
 		//translate
 		// var i = d3.select('.cueBall').transition()
 		// 	.attr('cx', x)
@@ -94,7 +95,22 @@
 				this.powerGrid.attr('height', this.powerBarHeight);
 			}
 		}, 10);
+		
 	}).on('mouseup', () => {
+		var power = (this.powerBarHeight / 240) * 300;
+
+		//find zeta coefficient
+		var z = Math.sqrt(Math.pow(power, 2) / (Math.pow(diffX, 2) + Math.pow(diffY, 2)));
+
+		//calculate translation distance
+		var translateX = this.diffX * -1 * z + this.originX;
+		var translateY = this.diffY * -1 * z + this.originY;
+
+		//translate
+		var i = d3.select('.cueBall').transition()
+			.attr('cx', translateX)
+			.attr('cy', translateY)
+
 		clearInterval(this.inCue);
 	});
 
