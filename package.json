@@ -1,0 +1,26 @@
+{
+  "name": "learnd3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benzeg/learnD3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benzeg/learnD3/issues"
+  },
+  "homepage": "https://github.com/benzeg/learnD3#readme",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "d3": "^4.8.0",
+    "webpack": "^2.5.1"
+  }
+}
