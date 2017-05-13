@@ -16,10 +16,11 @@ class Ball {
 			.style('fill', this.color)
 	}
 
-	translate(newCoordinates) {
-		this.model.transition()
+	translate(newCoordinates, cb) {
+		this.model.transition() 
 			.attr('cx', newCoordinates[0])
 			.attr('cy', newCoordinates[1])
+			.on('end', cb);
 	}
 
 	getPosition() {

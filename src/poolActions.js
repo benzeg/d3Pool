@@ -18,37 +18,59 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 		}, 10);
 	}).on('mouseup', () => {
 		//max force: 50N, max velocity: 1500px/sec
-		var Vmax = (this.powerBarHeight / 240) * 1500;
+		var Vmax = (this.powerBarHeight / 240) * 4500;
 
 		//start ball roll action
-		//while (Vmax > 0) {
 
-			//find zeta coefficient
-			var z = Math.sqrt(Math.pow(Vmax, 2) / (Math.pow(this.positionDiff[0], 2) + Math.pow(this.positionDiff[1], 2)));
-			
-			//calculate translation distance
-			var translateX = this.positionDiff[0] * -1 * z + this.cueBallPosition[0];
-			var translateY = this.positionDiff[1] * -1 * z + this.cueBallPosition[1];
+		//check boundaries
+			//check x axis
+			var move = () => {
+				//find zeta coefficient
+				var z = Math.sqrt(Math.pow(Vmax, 2) / (Math.pow(this.positionDiff[0], 2) + Math.pow(this.positionDiff[1], 2)));
 
-			//check boundaries
-				//check x axis
+				//calculate translation distance
+				var translateX = this.positionDiff[0] * -1 * z + this.cueBallPosition[0];
+				var translateY = this.positionDiff[1] * -1 * z + this.cueBallPosition[1];
+
+
 				if (translateX < 0) {
 					translateX = 16.25;
+					this.positionDiff[0] *= -1;
 				} else if (translateX > 1120) {
 					translateX = 1120 - 16.25;
+					this.positionDiff[0] *= -1;
 				}
 
 				//check y axis
 				if (translateY < 0) {
 					translateY = 16.25;
+					this.positionDiff[1] *= -1;
 				} else if (translateY > 560) {
 					translateY = 560 - 16.25;
+					this.positionDiff[1] *= -1;
 				}
 
+				var travelDistanceX = Math.abs(this.cueBallPosition[0] - translateX);
+				var travelDistanceY = Math.abs(this.cueBallPosition[1] - translateY);
 
-			//translate
-			cueBall.translate([translateX, translateY]);
-		//}
+				Vmax = Vmax - Math.sqrt(Math.pow(travelDistanceX, 2) + Math.pow(travelDistanceY, 2));
+
+
+				this.cueBallPosition[0] = translateX;
+				this.cueBallPosition[1] = translateY;
+				//translate
+				console.log(translateX, translateY);
+				cueBall.translate([translateX, translateY], () => {
+					console.log('triggered');
+					if (Vmax > 0) {
+						move();
+					} else {
+						return;
+					}
+				});
+			}
+
+			move();
 
 		//clear increment interval
 		this.powerBarHeight = 0;
