@@ -5,7 +5,7 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 		var mousePosition = board.getMouseCoordinates();
 		this.powerBarHeight = powerGrid.getHeight();
 		this.cueBallPosition = cueBall.getPosition();
-		this.positionDiff = [mousePosition[0] - this.cueBallPosition[0], mousePosition[1] - this.cueBallPosition[1]];
+		this.positionDiff = [this.cueBallPosition[0] - mousePosition[0], this.cueBallPosition[1] - mousePosition[1]];
 		this.powerUp = setInterval(() => {
 			//set power bar max height
 			if (this.powerBarHeight < 240) {
@@ -29,9 +29,8 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 				var z = Math.sqrt(Math.pow(Vmax, 2) / (Math.pow(this.positionDiff[0], 2) + Math.pow(this.positionDiff[1], 2)));
 
 				//calculate translation distance
-				var translateX = this.positionDiff[0] * -1 * z + this.cueBallPosition[0];
-				var translateY = this.positionDiff[1] * -1 * z + this.cueBallPosition[1];
-
+				var translateX = this.positionDiff[0] * z + this.cueBallPosition[0];
+				var translateY = this.positionDiff[1] * z + this.cueBallPosition[1];
 
 				if (translateX < 0) {
 					translateX = 16.25;
