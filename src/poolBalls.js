@@ -38,9 +38,10 @@ class CueBall extends Ball {
 }
 
 class GameBall extends Ball {
-	constructor(board, cx, cy, color) {
-		super(board, cx, cy);
-		this.color = color;
+	constructor(board, ballOptions) {
+		super(board, ballOptions.cx, ballOptions.cy);
+		console.log('hello')
+		this.color = ballOptions.color;
 	}
 }
 
