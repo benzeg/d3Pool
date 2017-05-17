@@ -18,13 +18,17 @@ class Ball {
 
 	translate(newCoordinates, cb) {
 		this.model.transition() 
-			.attr('cx', newCoordinates[0])
-			.attr('cy', newCoordinates[1])
+			.attr('cx', newCoordinates.x)
+			.attr('cy', newCoordinates.y)
 			.on('end', cb);
 	}
 
 	getPosition() {
 		return [this.model._groups[0][0].cx.animVal.value, this.model._groups[0][0].cy.animVal.value];
+	}
+
+	getModel() {
+		return this.model;
 	}
 }
 

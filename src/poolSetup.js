@@ -3,6 +3,7 @@ var ballModel = require('./poolBalls.js');
 var tableModel = require('./poolTable.js');
 var powerModel = require('./powerGrid.js');
 var poolActions = require('./poolActions.js');
+var physics = require('./poolState.js');
 /////////////////////////////////////////////////////////////////////////////
 class PoolGame {
 	constructor() {
@@ -40,13 +41,15 @@ class PoolGame {
 
 		this.cueBall = new ballModel.CueBall(this.table.model);
 		this.cueBall.addBall();
+		this.gameBalls.push(this.cueBall.getModel());
 
 		for (var i = 0; i < this.gameBallOptions.length; i++) {
 			var gameBall = new ballModel.GameBall(this.table.model, this.gameBallOptions[i]);
 			gameBall.addBall();
-			this.gameBalls.push(gameBall);
+			this.gameBalls.push(gameBall.getModel());
 		}
 		
+		// physics.initSimulation(this.gameBalls);
 		poolActions.setMouseEvent(this.table, this.powerGrid, this.cueBall);
 	}
 }	

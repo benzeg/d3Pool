@@ -1,11 +1,11 @@
+var Victor = require('victor');
 
 var setMouseEvent = function(board, powerGrid, cueBall) {
 	var table = board.getTable();
 	table.on('mousedown', () => {
-		var mousePosition = board.getMouseCoordinates();
+		//mouse coordinate
+		this.mouseVec = Victor.fromArray(board.getMouseCoordinates());
 		this.powerBarHeight = powerGrid.getHeight();
-		this.cueBallPosition = cueBall.getPosition();
-		this.positionDiff = [this.cueBallPosition[0] - mousePosition[0], this.cueBallPosition[1] - mousePosition[1]];
 		this.powerUp = setInterval(() => {
 			//set power bar max height
 			if (this.powerBarHeight < 240) {
@@ -20,56 +20,60 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 		//max force: 50N, max velocity: 1500px/sec
 		var Vmax = (this.powerBarHeight / 240) * 4500;
 
-		//start ball roll action
+		var move = () => {
+			//get cueball position
+			this.cueBallVec = Victor.fromArray(cueBall.getPosition());
 
-		//check boundaries
-			//check x axis
-			var move = () => {
-				//find zeta coefficient
-				var z = Math.sqrt(Math.pow(Vmax, 2) / (Math.pow(this.positionDiff[0], 2) + Math.pow(this.positionDiff[1], 2)));
+			//generate force vector
+			var forceVec = this.cueBallVec.clone();
+			forceVec.subtract(this.mouseVec);
+			//normalize force vector
+			forceVec.normalize();
+			//add travel distance
+			forceVec.x *= Vmax;
+			forceVec.y *= Vmax;
 
-				//calculate translation distance
-				var translateX = this.positionDiff[0] * z + this.cueBallPosition[0];
-				var translateY = this.positionDiff[1] * z + this.cueBallPosition[1];
+			//calculate translation position
+			var translateVec = this.cueBallVec.clone().add(forceVec);
 
-				if (translateX < 0) {
-					translateX = 16.25;
-					this.positionDiff[0] *= -1;
-				} else if (translateX > 1120) {
-					translateX = 1120 - 16.25;
-					this.positionDiff[0] *= -1;
+			//check bounds and invert force vector
+			if (translateVec.x < 0 || translateVec.x > 1120 - 16.25 || translateVec.y < 0 || translateVec.y > 560 - 16.25) {
+				var reverseForceVec = forceVec.clone().invert();
+				var ratio = 1;
+
+				if (translateVec.x < 0) {
+					ratio = (forceVec.x - translateVec.x) / forceVec.x;
+					//
+					//translateVec.x = 16.25;
+				} else if (translateVec.x > (1120 - 16.25)) {
+					ratio = (forceVec.x - (translateVec.x - (1120 - 16.25))) / forceVec.x;
+					//
+					//translateVec.x = 1120 - 16.25;
+				} else if (translateVec.y < 0) {
+					ratio = (forceVec.y - translateVec.y) / forceVec.y;
+				} else if (translateVec.y > (560 - 16.25)) {
+					ratio = (forceVec.y - (translateVec.y - (500 - 16.25))) / forceVec.y;
 				}
 
-				//check y axis
-				if (translateY < 0) {
-					translateY = 16.25;
-					this.positionDiff[1] *= -1;
-				} else if (translateY > 560) {
-					translateY = 560 - 16.25;
-					this.positionDiff[1] *= -1;
-				}
+				forceVec.x *= ratio;
+				forceVec.y *= ratio;
+				console.log('forceVector', forceVec)
+				translateVec = this.cueBallVec.clone().add(forceVec);
 
-				var travelDistanceX = Math.abs(this.cueBallPosition[0] - translateX);
-				var travelDistanceY = Math.abs(this.cueBallPosition[1] - translateY);
+			};
+			//translate
+			// cueBall.translate(translateVec, () => {
+			// 	// if (Vmax > 0) {
+			// 	// 	move();
+			// 	// } else {
+			// 	// 	return;
+			// 	// }
+			// 	console.log('done')
+			// });
+			cueBall.translate(translateVec);
+		}
 
-				Vmax = Vmax - Math.sqrt(Math.pow(travelDistanceX, 2) + Math.pow(travelDistanceY, 2));
-
-
-				this.cueBallPosition[0] = translateX;
-				this.cueBallPosition[1] = translateY;
-				//translate
-				console.log(translateX, translateY);
-				cueBall.translate([translateX, translateY], () => {
-					console.log('triggered');
-					if (Vmax > 0) {
-						move();
-					} else {
-						return;
-					}
-				});
-			}
-
-			move();
+		move();
 
 		//clear increment interval
 		this.powerBarHeight = 0;
