@@ -35,32 +35,52 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 
 			//calculate translation position
 			var translateVec = this.cueBallVec.clone().add(forceVec);
-
+			//normalize force vector
+			//forceVec.normalize();
 			//check bounds and invert force vector
-			if (translateVec.x < 0 || translateVec.x > 1120 - 16.25 || translateVec.y < 0 || translateVec.y > 560 - 16.25) {
-				var reverseForceVec = forceVec.clone().invert();
-				var ratio = 1;
 
+
+			if (translateVec.x < 0 || translateVec.x > (1120 - 16.25)) {
+				var diff;
+				var ratio = Math.abs(forceVec.y/forceVec.x);
+				//var reverseForceVec = forceVec.clone().invert();
 				if (translateVec.x < 0) {
-					ratio = (forceVec.x - translateVec.x) / forceVec.x;
-					//
-					//translateVec.x = 16.25;
-				} else if (translateVec.x > (1120 - 16.25)) {
-					ratio = (forceVec.x - (translateVec.x - (1120 - 16.25))) / forceVec.x;
-					//
-					//translateVec.x = 1120 - 16.25;
-				} else if (translateVec.y < 0) {
-					ratio = (forceVec.y - translateVec.y) / forceVec.y;
-				} else if (translateVec.y > (560 - 16.25)) {
-					ratio = (forceVec.y - (translateVec.y - (500 - 16.25))) / forceVec.y;
+					diff = 32.50 - translateVec.x;
+					console.log(forceVec);
+					var k = forceVec.x + diff;
+					var rat = k / forceVec.x;
+					forceVec.x += diff;
+					forceVec.y *= rat;
+					console.log(forceVec);
+				} else {
+					diff = translateVec.x - (1120 - 16.25);
+					var k = forceVec.x - diff;
+					var rat = k / forceVec.x;
+					forceVec.x -= diff;
+					forceVec.y *= rat;
 				}
-
-				forceVec.x *= ratio;
-				forceVec.y *= ratio;
-				console.log('forceVector', forceVec)
+			} else if (translateVec.y < 0 || translateVec.y > (560 - 16.25)) {
+				var diff;
+				var ratio = Math.abs(forceVec.x / forceVec.y);
+				var reverseForceVec = forceVec.clone().invert();
+				if (translateVec.y < 0) {
+					diff = 16.25 - translateVec.y;
+					var k = forceVec.y + diff;
+					var rat = k / forceVec.y;
+					forceVec.y += diff;
+					forceVec.x *= rat;
+				} else {
+					diff = translateVec.y - (560 - 16.25);
+					var k = forceVec.y - diff;
+					var rat = k / forceVec.y;
+					forceVec.y -= diff;
+					forceVec.x *= rat;
+				}
+				//convert x component and add to translate vector
 				translateVec = this.cueBallVec.clone().add(forceVec);
-
-			};
+				console.log('hello', translateVec);
+			}
+		
 			//translate
 			// cueBall.translate(translateVec, () => {
 			// 	// if (Vmax > 0) {

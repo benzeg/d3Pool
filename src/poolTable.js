@@ -1,3 +1,5 @@
+var d3 = require('d3');
+
 class Table {
 	constructor(container) {
 		this.container = container;
