@@ -19,7 +19,7 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 	}).on('mouseup', () => {
 		//max force: 50N, max velocity: 1500px/sec
 		var Vmax = (this.powerBarHeight / 240) * 4500;
-
+		var velVec = Victor.fromArray([Vmax, Vmax]);
 		var move = () => {
 			//get cueball position
 			this.cueBallVec = Victor.fromArray(cueBall.getPosition());
@@ -30,8 +30,7 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 			//normalize force vector
 			forceVec.normalize();
 			//add travel distance
-			forceVec.x *= Vmax;
-			forceVec.y *= Vmax;
+			forceVec.multiply(velVec);
 
 			//calculate translation position
 			var translateVec = this.cueBallVec.clone().add(forceVec);
@@ -39,48 +38,39 @@ var setMouseEvent = function(board, powerGrid, cueBall) {
 			//forceVec.normalize();
 			//check bounds and invert force vector
 
-
-			if (translateVec.x < 0 || translateVec.x > (1120 - 16.25)) {
-				var diff;
-				var ratio = Math.abs(forceVec.y/forceVec.x);
-				//var reverseForceVec = forceVec.clone().invert();
-				if (translateVec.x < 0) {
-					diff = 32.50 - translateVec.x;
-					console.log(forceVec);
-					var k = forceVec.x + diff;
-					var rat = k / forceVec.x;
-					forceVec.x += diff;
-					forceVec.y *= rat;
-					console.log(forceVec);
-				} else {
-					diff = translateVec.x - (1120 - 16.25);
-					var k = forceVec.x - diff;
-					var rat = k / forceVec.x;
-					forceVec.x -= diff;
-					forceVec.y *= rat;
-				}
-			} else if (translateVec.y < 0 || translateVec.y > (560 - 16.25)) {
-				var diff;
-				var ratio = Math.abs(forceVec.x / forceVec.y);
-				var reverseForceVec = forceVec.clone().invert();
-				if (translateVec.y < 0) {
-					diff = 16.25 - translateVec.y;
-					var k = forceVec.y + diff;
-					var rat = k / forceVec.y;
-					forceVec.y += diff;
-					forceVec.x *= rat;
-				} else {
-					diff = translateVec.y - (560 - 16.25);
-					var k = forceVec.y - diff;
-					var rat = k / forceVec.y;
-					forceVec.y -= diff;
-					forceVec.x *= rat;
-				}
-				//convert x component and add to translate vector
+			if (translateVec.x < 16.25) {
+				var diffX = -16.25 + translateVec.x;
+				var ratio = diffX / forceVec.x;
+				var diffY = ratio * forceVec.y;
+				var reverseVec = Victor.fromArray([-diffX, -diffY]);
+				forceVec.add(reverseVec);
 				translateVec = this.cueBallVec.clone().add(forceVec);
-				console.log('hello', translateVec);
+			} else if (translateVec.x > 1120 - 16.25) {
+				var diffX = 16.26 + (translateVec.x - 1120);
+				var ratio = diffX / forceVec.x;
+				var diffY = ratio * forceVec.y;
+				var reverseVec = Victor.fromArray([-diffX, -diffY]);
+				forceVec.add(reverseVec);
+				translateVec = this.cueBallVec.clone().add(forceVec);
 			}
-		
+			if (translateVec.y < 16.25) {
+				var diffY = -16.25 + translateVec.y;
+				var ratio = diffY / forceVec.y;
+				var diffX = ratio * forceVec.x;
+				var reverseVec = Victor.fromArray([-diffX, -diffY]);
+				console.log('reverseVec', reverseVec);
+				console.log('forceVec', forceVec);
+				forceVec.add(reverseVec);
+				console.log('forceVec', forceVec);
+				translateVec = this.cueBallVec.clone().add(forceVec);
+			} else if (translateVec.y > 560 - 16.25) {
+				var diffY = 16.25 + (translateVec.y - 560);
+				var ratio = diffY / forceVec.y;
+				var diffX = ratio * forceVec.x;
+				var reverseVec = Victor.fromArray([-diffX, -diffY]);
+				forceVec.add(reverseVec);
+				translateVec = this.cueBallVec.clone().add(forceVec);
+			}
 			//translate
 			// cueBall.translate(translateVec, () => {
 			// 	// if (Vmax > 0) {

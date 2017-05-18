@@ -22,6 +22,7 @@
     "babel-preset-env": "^1.4.0",
     "d3": "^4.8.0",
     "d3-force": "^1.0.6",
+    "sylvester": "0.0.21",
     "victor": "^1.1.0",
     "webpack": "^2.5.1"
   }
