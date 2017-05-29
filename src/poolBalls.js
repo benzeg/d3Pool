@@ -4,6 +4,7 @@ class Ball {
 		this.model = null;
 		this.ballOptions = null;
 		this.class = null;
+		this.velocity = null;
 	}
 
 	addBall() {
@@ -22,8 +23,8 @@ class Ball {
 
 	translate(data, cb) {
 		this.model.transition() 
-			.attr('cx', newCoordinates.x)
-			.attr('cy', newCoordinates.y)
+			.attr('cx', data[0].cx)
+			.attr('cy', data[0].cy)
 			.on('end', cb);
 	}
 
@@ -44,10 +45,15 @@ class CueBall extends Ball {
 			 'cy': 280,
 			 'r': '16.25px',
 			 'fill': "#ffffff",
-			 'class': "cueball"
+			 'class': "cueball",
+			 'velocity': 0
 			}
 		];
 		this.class = '.cueball';
+	}
+
+	getPosition() {
+		return [this.ballOptions[0].cx, this.ballOptions[0].cy];
 	}
 }
 
@@ -59,33 +65,40 @@ class GameBall extends Ball {
 			 'cy': 280,
 			 'r': '16.25px',
 			 'fill': '#ffcc00',
-			 'class': 'gameball'},
+			 'class': 'gameball',
+			 'velocity': 0},
 			{'cx': 868.14,
 			 'cy': 263.75,
 			 'r': '16.25px',
 			 'fill': '#c61313',
-			 'class': 'gameball'},
+			 'class': 'gameball',
+			 'velocity': 0},
 			{'cx': 868.14,
 		   'cy': 296.25,
 		   'r': '16.25px',
 		 	 'fill': '#0c00ff',
-		 	 'class': 'gameball'},
+		 	 'class': 'gameball',
+			 'velocity': 0},
 		 	{'cx': 896.28,
 		 	 'cy': 247.50,
 		 	 'r': '16.25px',
 		 	 'fill': '#ff7a08',
-		 	 'class': 'gameball'},
+		 	 'class': 'gameball',
+			 'velocity': 0},
 		 	{'cx': 896.28,
 		   'cy': 280,
 		   'r': '16.25px',
 		   'fill': '#6308a9',
-		   'class': 'gameball'},
+		   'class': 'gameball',
+			 'velocity': 0},
 		  {'cx': 896.28,
 		   'cy': 312.50,
 		   'r': '16.25px',
 		 	 'fill': '#035b3b',
-		 	 'class': 'gameball'}
+		 	 'class': 'gameball',
+			 'velocity': 0}
 		];
+		
 		this.class = '.gameball';
 	}
 }
