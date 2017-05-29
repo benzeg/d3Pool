@@ -26,7 +26,7 @@ class PoolGame {
 		this.gameBall = new ballModel.GameBall(this.table.model);
 		this.gameBall.addBall();
 
-		//poolActions.setMouseEvent(this.table, this.powerGrid, this.cueBall, this.gameBall);
+		poolActions.setMouseEvent(this.table, this.powerGrid, this.cueBall, this.gameBall);
 	}
 }	
 
