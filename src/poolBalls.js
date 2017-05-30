@@ -2,9 +2,53 @@ class Ball {
 	constructor(board) {
 		this.board = board;
 		this.model = null;
-		this.ballOptions = null;
-		this.class = null;
+		this.class = 'ball';
 		this.velocity = null;
+		this.ballOptions = [
+			{'cx': 280,
+			 'cy': 280,
+			 'r': '16.25px',
+			 'fill': "#ffffff",
+			 'class': "cueball",
+			 'velocity': 0
+			},
+			{'cx': 840,
+			 'cy': 280,
+			 'r': '16.25px',
+			 'fill': '#ffcc00',
+			 'class': 'gameball',
+			 'velocity': 0},
+			{'cx': 868.14,
+			 'cy': 263.75,
+			 'r': '16.25px',
+			 'fill': '#c61313',
+			 'class': 'gameball',
+			 'velocity': 0},
+			{'cx': 868.14,
+		   'cy': 296.25,
+		   'r': '16.25px',
+		 	 'fill': '#0c00ff',
+		 	 'class': 'gameball',
+			 'velocity': 0},
+		 	{'cx': 896.28,
+		 	 'cy': 247.50,
+		 	 'r': '16.25px',
+		 	 'fill': '#ff7a08',
+		 	 'class': 'gameball',
+			 'velocity': 0},
+		 	{'cx': 896.28,
+		   'cy': 280,
+		   'r': '16.25px',
+		   'fill': '#6308a9',
+		   'class': 'gameball',
+			 'velocity': 0},
+		  {'cx': 896.28,
+		   'cy': 312.50,
+		   'r': '16.25px',
+		 	 'fill': '#035b3b',
+		 	 'class': 'gameball',
+			 'velocity': 0}
+		];
 	}
 
 	addBall() {
@@ -34,6 +78,10 @@ class Ball {
 
 	getModel() {
 		return this.model;
+	}
+
+	getCueBallPosition() {
+		return [this.ballOptions[0].cx, this.ballOptions[0].cy];
 	}
 }
 
@@ -104,6 +152,7 @@ class GameBall extends Ball {
 }
 
 module.exports = {
+	Ball: Ball,
 	CueBall: CueBall,
 	GameBall: GameBall
 }
