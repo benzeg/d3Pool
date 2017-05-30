@@ -111,7 +111,8 @@ class forceSimulation {
 					var cx2 = this.nodes[index].cx;
 					var cy2 = this.nodes[index].cy;
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
-					if ((32) >= distance) {
+					if ((32.5) >= distance) {
+						console.log('collide')
 						//perfect elastic collision
 						collide = true;
 						//for testing purposes
@@ -122,8 +123,8 @@ class forceSimulation {
 						newVec.x *= coeff;
 						newVec.y *= coeff;
 						if (this.forceVec[index]) {
-							// this.forceVec[index].add(this.forceVec[currIndex]);
-							this.forceVec[index] = newVec;
+							this.forceVec[index].add(newVec);
+							console.log('new collision force', this.forceVec[index])
 						} else {
 							// this.forceVec[index] = this.forceVec[currIndex].clone();
 							this.forceVec[index] = newVec;
