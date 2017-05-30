@@ -45,11 +45,9 @@ class forceSimulation {
 	applyForce(forceVec) {
 		this.forceVec.push(forceVec);
 		this.move = setInterval(() => {
-			console.log(this.run)
 			if(this.run) {
 				var cb = () => {
 					if (!this.checkForceVec()) {
-						console.log('no more force vectors');
 						clearInterval(this.move);
 					} else {
 						//apply force vector to node position
@@ -69,17 +67,16 @@ class forceSimulation {
 								} else {
 									this.forceVec[index].subtract(friction);
 								}
-								console.log(this.forceVec)
 								//remove force vector if it becomes stationary
-								if (this.forceVec[index].x === 0 && this.forceVec[index].y === 0) {
+								if (Math.floor(Math.abs(this.forceVec[index].x)) === 0 && Math.floor(Math.abs(this.forceVec[index].y)) === 0) {
 									this.forceVec[index] = undefined;
+									this.moved[index] = 0;
 								}
 							} 
 						});
 						//emit event to update dom
 						this.pause();
 						this.emit('tick');
-						console.log('tick emitted');
 					}
 				}
 				//check collision
@@ -113,27 +110,29 @@ class forceSimulation {
 					var r2 = this.nodes[index].r;
 					var cx2 = this.nodes[index].cx;
 					var cy2 = this.nodes[index].cy;
-					console.log(r1, r2, cx1, cx2, cy1, cy2);
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
-					console.log('distance', distance, 'sum', r1+r2);
-					if ((32.50) >= distance) {
+					if ((34) >= distance) {
 						//perfect elastic collision transfer
-						console.log('collision!')
 						collide = true;
+						//for testing purposes
+						var newCoord = [cx2 - cx1, cy2 - cy1];
+						var newVec = new Victor.fromArray(newCoord);
+						newVec.normalize();
+						var coeff = this.forceVec[currIndex].length();
+						newVec.x *= coeff;
+						newVec.y *= coeff;
 						if (this.forceVec[index]) {
-							this.forceVec[index].add(this.forceVec[currIndex]);
+							// this.forceVec[index].add(this.forceVec[currIndex]);
+							this.forceVec[index] = newVec;
 						} else {
-							if (this.forceVec[currIndex] === undefined) {
-								console.log('HERE IS ANOTHER ERROR', currIndex)
-							}
-							this.forceVec[index] = this.forceVec[currIndex].clone();
+							// this.forceVec[index] = this.forceVec[currIndex].clone();
+							this.forceVec[index] = newVec;
 						}
 					}
 				}
 				if (index === this.nodes.length -1) {
 					if (collide) {
-						this.forceVec[currIndex] = undefined;
-						this.moved[currIndex] = 0;
+						this.forceVec[currIndex].invert();
 					}
 					return cb();
 				}
@@ -168,6 +167,7 @@ class forceSimulation {
 	}
 
 	checkForceVec() {
+		console.log(this.forceVec);
 		for (var i = 0; i < this.forceVec.length; i++) {
 			if (this.forceVec[i] !== undefined) {
 				return true;
