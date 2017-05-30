@@ -49,7 +49,7 @@ class forceSimulation {
 					clearInterval(this.move);
 				} else {
 					//apply force vector to node position
-					this.nodes.forEach((node, index) =>{
+					this.nodes.forEach((node, index) => {
 						if (this.forceVec[index]) {
 							//calculate translation vector here
 							var transVec = this.forceVec[index].clone().multiply(this.timeVec);
@@ -65,7 +65,7 @@ class forceSimulation {
 								this.forceVec[index] = undefined;
 							}
 						} 
-					}
+					});
 					//emit event to update dom
 					this.emit('tick');
 					this.pause();
