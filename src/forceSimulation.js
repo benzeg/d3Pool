@@ -111,8 +111,8 @@ class forceSimulation {
 					var cx2 = this.nodes[index].cx;
 					var cy2 = this.nodes[index].cy;
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
-					if ((34) >= distance) {
-						//perfect elastic collision transfer
+					if ((32) >= distance) {
+						//perfect elastic collision
 						collide = true;
 						//for testing purposes
 						var newCoord = [cx2 - cx1, cy2 - cy1];
@@ -143,22 +143,23 @@ class forceSimulation {
 	}
 
 	checkWallCollision(cb) {
-		//currently just stops if hits a wall
+		//if ball touches bound
+		//i) reflect axis that touches bound
 		this.nodes.forEach((node, index) => {
 			if (node.cx < 16.25) {
 				node.cx = 16.25;
-				this.forceVec[index] = undefined;
+				this.forceVec[index].x *= -1;
 			} else if (node.cx > 1103.75) {
 				node.cx = 1103.75;
-				this.forceVec[index] = undefined;
+				this.forceVec[index].x *= -1;
 			}
 
 			if (node.cy < 16.25) {
 				node.cy = 16.25;
-				this.forceVec[index] = undefined;
+				this.forceVec[index].y *= -1;
 			} else if (node.cy > 543.75) {
 				node.cy = 543.75;
-				this.forceVec[index] = undefined;
+				this.forceVec[index].y *= -1;
 			}
 			if (index === this.nodes.length -1) {
 				return cb();
