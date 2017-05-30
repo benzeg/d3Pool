@@ -133,7 +133,8 @@ class forceSimulation {
 				}
 				if (index === this.nodes.length -1) {
 					if (collide) {
-						this.forceVec[currIndex].invert();
+						var reflectVec = new Victor.fromArray([0.2, 0.2]);
+						this.forceVec[currIndex].invert().multiply(reflectVec);
 					}
 					return cb();
 				}
