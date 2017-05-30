@@ -9,6 +9,7 @@ class forceSimulation {
 		//**refactor to bitwise operation
 		this.moved = [];
 		this.run = true;
+		this.move = null;
 	}
 
 	on(event, cb) {
@@ -37,6 +38,7 @@ class forceSimulation {
 			this.moved.push(0);
 			i++;
 		}
+		return this;
 	}
 
 	applyForce(forceVec) {
@@ -44,8 +46,8 @@ class forceSimulation {
 		this.move = setInterval(() => {
 			if(this.run) {
 				//check collision
-				updateAllNodes();
-				if (!checkForceVec()) {
+				this.updateAllNodes();
+				if (!this.checkForceVec()) {
 					clearInterval(this.move);
 				} else {
 					//apply force vector to node position
@@ -72,18 +74,16 @@ class forceSimulation {
 				}
 			}
 		}, 40);
-
-		this.move();
 	}
 
 	updateAllNodes() {
 		this.nodes.forEach((node, index) => {
 			if (this.moved[index] === 1) {
-				checkCollision(index);
+				this.checkCollision(index);
 				this.moved[index] = 0;
 			}
 		});
-		checkWallCollision();
+		this.checkWallCollision();
 	}
 
 	checkCollision(currIndex) {
