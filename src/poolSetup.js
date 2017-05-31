@@ -1,29 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-var ballModel = require('./poolBalls.js');
-var tableModel = require('./poolTable.js');
-var powerModel = require('./powerGrid.js');
-var poolActions = require('./poolActions.js');
-var physics = require('./poolState.js');
+/*Dependencies*/
+var TableModel = require('./poolTable.js');
+var PowerModel = require('./powerGrid.js');
+var BallModel = require('./poolBall.js');
+var ControlModel = require('./gameControl.js');
 /////////////////////////////////////////////////////////////////////////////
 class PoolGame {
-	constructor() {
-		this.board = null;
-		this.cueBall = null;
-		this.gameBall = null;
+	constructor(HTMLcontainer) {
+		//html container
+		this.Container = HTMLcontainer;
+
+		//MODELS
+		this.GameTable = null;
+		this.PoolBalls = null;
+		this.GameControl = null;
 	}
 
-	setUp(board) {
-		this.board = board;
-		this.table = new tableModel.Table(this.board);
-		this.table.setTable();
+	/*
+	i)	Generate new game object models and calls on set to add their svg elements to DOM
+			Includes: 
+		  	1)pool table
+		  	2)power grid
+		  	3)pool balls
+	ii)	Initiate game control listeners
+	*/
+	newGame() {
+		//game table contains an svg:svg element inserted into a div container
+		this.GameTable = new TableModel.Table(this.Container);
+		this.GameTable.setUp();
 
-		this.powerGrid = new powerModel.PowerGrid(this.table.model);
-		this.powerGrid.setUp();
+		///power grid contains two svg:rect elements inserted into game table svg container
+		this.PowerGrid = new PowerModel.PowerGrid(this.GameTable);
+		this.PowerGrid.setUp();
 
-		this.Ball = new ballModel.Ball(this.table.model);
-		this.Ball.addBall();
+		//ball contains a d3 selection of svg:circle elements inserted into game table svg container 
+		this.Ball = new ballModel.Ball(this.GameTable);
+		this.Ball.setUp();
 	
-		poolActions.setMouseEvent(this.table, this.powerGrid, this.Ball);
+		//game control assigns game logic to game objects
+		this.GameControl = new ControlModel(this.GameTable, this.PowerGrid, this.Ball)
+		this.GameControl.setUp();
 	}
 }	
 
