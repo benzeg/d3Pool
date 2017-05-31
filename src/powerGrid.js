@@ -2,7 +2,7 @@
 var Victor = require('victor'); //vector library
 
 /*CODE*/
-class PowerGrid {
+class Init {
 	constructor(SVGContainer) {
 		//STYLING
 		this.powerGridOptions = {
@@ -31,10 +31,12 @@ class PowerGrid {
 		this.currentPower = null;
 	}
 
-	//generates new power grid svg and adds to pool table svg
-	//Grid is set up to include an outer rectangular box with set height and white background
-	//and an inner grid with initial height of 0, inner grid's height increases dynamically
-	//to reflect a cue hit's power level
+	/*
+	Generates new power grid svg and adds to pool table svg.
+	Grid is set up to include an outer rectangular box with set height and white background
+	and an inner grid with initial height of 0, inner grid's height increases dynamically
+	to reflect a cue hit's power level.
+	*/
 	setUp() {
 		//populate SVG models
 		this.powerGrid = this.Container.append('svg:rect')
@@ -78,5 +80,5 @@ class PowerGrid {
 }
 
 module.exports = {
-	PowerGrid: PowerGrid
+	Init: Init
 }
