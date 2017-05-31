@@ -50,5 +50,5 @@ class Init {
 }	
 
 module.exports = {
-	PoolGame: PoolGame
+	Init: Init
 }
