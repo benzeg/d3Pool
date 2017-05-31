@@ -1,5 +1,6 @@
 /*Dependencies*/
 var TableModel = require('./poolTable.js');
+var PocketModel = require('./poolPocket.js');
 var PowerModel = require('./powerGrid.js');
 var BallModel = require('./poolBall.js');
 var ControlModel = require('./gameControl.js');
@@ -10,7 +11,8 @@ class PoolGame {
 		this.Container = HTMLcontainer;
 
 		//MODELS
-		this.GameTable = null;
+		this.Table = null;
+		this.Pocket = null;
 		this.PoolBalls = null;
 		this.GameControl = null;
 	}
@@ -19,25 +21,30 @@ class PoolGame {
 	i)	Generate new game object models and calls on set to add their svg elements to DOM
 			Includes: 
 		  	1)pool table
-		  	2)power grid
-		  	3)pool balls
+		  	2)pool pockets
+		  	3)power grid
+		  	4)pool balls
 	ii)	Initiate game control listeners
 	*/
 	newGame() {
 		//game table contains an svg:svg element inserted into a div container
-		this.GameTable = new TableModel.Table(this.Container);
-		this.GameTable.setUp();
+		this.Table = new TableModel.Init(this.Container);
+		this.Table.setUp();
 
+		//game pocket contains a selection of svg:circle elements inserted into game table svg container
+		this.Pocket = new PocketModel.Init(this.Table);
+		this.Pocket.setUp();
+		
 		///power grid contains two svg:rect elements inserted into game table svg container
-		this.PowerGrid = new PowerModel.PowerGrid(this.GameTable);
+		this.PowerGrid = new PowerModel.Init(this.Table);
 		this.PowerGrid.setUp();
 
-		//ball contains a d3 selection of svg:circle elements inserted into game table svg container 
-		this.Ball = new ballModel.Ball(this.GameTable);
+		//ball contains a selection of svg:circle elements inserted into game table svg container 
+		this.Ball = new ballModel.Init(this.Table);
 		this.Ball.setUp();
 	
 		//game control assigns game logic to game objects
-		this.GameControl = new ControlModel(this.GameTable, this.PowerGrid, this.Ball)
+		this.GameControl = new ControlModel.Init(this.Table, this.Pocket, this.PowerGrid, this.Ball)
 		this.GameControl.setUp();
 	}
 }	
