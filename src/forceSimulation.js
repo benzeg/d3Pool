@@ -112,25 +112,28 @@ class forceSimulation {
 					var cy2 = this.nodes[index].cy;
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
 					if ((32.5) >= distance) {
-						console.log('collide')
 						//perfect elastic collision
 						collide = true;
-						//for testing purposes
+						//calculate force direction vector based on ball A and ball B center points
 						var newCoord = [cx2 - cx1, cy2 - cy1];
 						var newVec = new Victor.fromArray(newCoord);
 						newVec.normalize();
-						var coeff = this.forceVec[currIndex].length();
-						newVec.x *= coeff;
-						newVec.y *= coeff;
+						//translate current force vector magnitude to new force vector
+							//hacky right now and just multiplies both x and y vectors by magnitude
+						var magnitude = this.forceVec[currIndex].length();
+						newVec.x *= magnitude;
+						newVec.y *= magnitude;
+						//add vectors if ball B is already in motion, otherwise set ball B force vector to new force vector
 						if (this.forceVec[index]) {
 							this.forceVec[index].add(newVec);
-							console.log('new collision force', this.forceVec[index])
 						} else {
-							// this.forceVec[index] = this.forceVec[currIndex].clone();
 							this.forceVec[index] = newVec;
 						}
 					}
 				}
+				
+				//once all possible collisions have been accounted for and if one or more collisions occur
+					//hacky right now and just applies a preset decay force to reverse vector
 				if (index === this.nodes.length -1) {
 					if (collide) {
 						var reflectVec = new Victor.fromArray([0.2, 0.2]);
@@ -147,21 +150,22 @@ class forceSimulation {
 	checkWallCollision(cb) {
 		//if ball touches bound
 		//i) reflect axis that touches bound
+		//ii) decrease returned force by 30% to account for wall absorption
 		this.nodes.forEach((node, index) => {
 			if (node.cx < 16.25) {
 				node.cx = 16.25;
-				this.forceVec[index].x *= -1;
+				this.forceVec[index].x *= -0.7;
 			} else if (node.cx > 1103.75) {
 				node.cx = 1103.75;
-				this.forceVec[index].x *= -1;
+				this.forceVec[index].x *= -0.7;
 			}
 
 			if (node.cy < 16.25) {
 				node.cy = 16.25;
-				this.forceVec[index].y *= -1;
+				this.forceVec[index].y *= -0.7;
 			} else if (node.cy > 543.75) {
 				node.cy = 543.75;
-				this.forceVec[index].y *= -1;
+				this.forceVec[index].y *= -0.7;
 			}
 			if (index === this.nodes.length -1) {
 				return cb();
