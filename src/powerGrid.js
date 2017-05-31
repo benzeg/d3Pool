@@ -5,21 +5,22 @@ var Victor = require('victor'); //vector library
 class Init {
 	constructor(SVGContainer) {
 		//STYLING
-		this.powerGridOptions = {
+		this.gridOptions = {
 			height: 240,
 			width: 20,
-			x: 1120,
-			y: 80,
 			fill: '#ffffff'
-		}
+		};
 
-		this.powerLevelOptions = {
+		this.levelOptions = {
 			height: 0,
 			width: 20,
-			x: 1120,
-			y: 80,
 			fill: '#8c55555'
-		}
+		};
+
+		this.positionOptions = {
+			x: 1120,
+			y: 80
+		};
 
 		//SVGs
 		this.Container = SVGcontainer;
@@ -40,22 +41,22 @@ class Init {
 	setUp() {
 		//populate SVG models
 		this.powerGrid = this.Container.append('svg:rect')
-			.attr('height', this.powerGridOptions.height)
-			.attr('width', this.powerGridOptions.width)
-			.attr('x', this.powerGridOptions.x)
-			.attr('y', this.powerGridOptions.y)
-			.attr('fill', this.powerGridOptions.fill);
+			.attr('x', this.positionOptions.x)
+			.attr('y', this.positionOptions.y)
+			.attr('height', this.gridOptions.height)
+			.attr('width', this.gridOptions.width)
+			.attr('fill', this.gridOptions.fill);
 
 		this.powerLevel = this.Container.append('svg:rect')
-			.attr('height', this.powerLevelOptions.height)
-			.attr('width', this.powerLevelOptions.width)
-			.attr('x', this.powerLevelOptions.x)
-			.attr('y', this.powerLevelOptions.y)
-			.attr('fill', this.powerLevelOptions.fill)
+			.attr('x', this.positionOptions.x)
+			.attr('y', this.positionOptions.y)
+			.attr('height', this.levelOptions.height)
+			.attr('width', this.levelOptions.width)
+			.attr('fill', this.levelOptions.fill)
 
 		//populate cache
 		this.currentPower = 0;
-		this.maxPower = this.powerGridOptions.height;
+		this.maxPower = this.gridOptions.height;
 
 		return;
 	}
