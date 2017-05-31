@@ -5,7 +5,7 @@ var PowerModel = require('./powerGrid.js');
 var BallModel = require('./poolBall.js');
 var ControlModel = require('./gameControl.js');
 /////////////////////////////////////////////////////////////////////////////
-class PoolGame {
+class Init {
 	constructor(HTMLcontainer) {
 		//html container
 		this.Container = HTMLcontainer;
@@ -34,7 +34,7 @@ class PoolGame {
 		//game pocket contains a selection of svg:circle elements inserted into game table svg container
 		this.Pocket = new PocketModel.Init(this.Table);
 		this.Pocket.setUp();
-		
+
 		///power grid contains two svg:rect elements inserted into game table svg container
 		this.PowerGrid = new PowerModel.Init(this.Table);
 		this.PowerGrid.setUp();
