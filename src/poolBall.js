@@ -5,48 +5,45 @@ const Victor = require('victor');
 class Init {
 	constructor(SVGcontainer) {
 		//STYLING
-		this.activeClass = 'activeBall';
-		this.inactiveClass = "inactiveBall";
 		this.r = 16.25;
-		this.activeStyle = [
+		this.ballStyle = [
 			{'cx': 320,
 			 'cy': 320,
 			 'fill': "#ffffff",
 			 'id': "cueBall",
-			 'active': 0},
+			 'class': "activeBall"},
 			{'cx': 880,
 			 'cy': 320,
 			 'fill': '#ffcc00',
 			 'id': "yellowBall",
-			 'active': 0},
+			 'class': "activeBall"},
 			{'cx': 908.14,
 			 'cy': 303.75,
 			 'fill': '#c61313',
 			 'id': "redBall",
-			 'active': 0},
+			 'class': "activeBall"},
 			{'cx': 908.14,
 		   'cy': 336.25,
 		 	 'fill': '#0c00ff',
 			 'id': "blueBall",
-			 'active': 0},
+			 'class': "activeBall"},
 		 	{'cx': 936.28,
 		 	 'cy': 287.50,
 		 	 'fill': '#ff7a08',
 			 'id': "orangeBall",
-			 'active': 0},
+			 'class': "activeBall"},
 		 	{'cx': 936.28,
 		   'cy': 320,
 		   'fill': '#6308a9',
 			 'id': "purpleBall",
-			 'active': 0},
+			 'class': "activeBall"},
 		  {'cx': 936.28,
 		   'cy': 352.50,
 		 	 'fill': '#035b3b',
 			 'id': "greenBall",
-			 'active': 0}
+			 'class': "activeBall"}
 		];
 
-		this.inactiveStyle = [];
 		//SVG container
 		this.Container = SVGcontainer;
 
@@ -62,38 +59,32 @@ class Init {
 	Use preset data to generate a selection of active ball svg circles
 	*/
 	setUp() {
-		this.activeModel = this.Container.selectAll(this.activeClass)
-			.data(this.activeStyle)
+		this.activeModel = this.Container.selectAll('.activeBall')
+			.data(this.ballStyle)
 			.enter()
 			.append('svg:circle');
 
 		this.activeModel
-			.attr('class', this.activeClass)
 			.attr('r', this.r)
+			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
 			.attr('cy', (d) => d.cy)
 			.style('fill', (d) => d.fill)
 			.attr('id', (d) => d.id);
 
-		this.inactiveModel = this.Container.selectAll(this.inactiveClass)
+		this.inactiveModel = this.Container.selectAll('.inactiveBall')
 			.data(this.inactiveStyle)
 			.enter()
 			.append('svg:circle');
 
 		this.inactiveModel
-			.attr('class', this.inactiveClass)
 			.attr('r', this.r)
+			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
-			.attr('cy', (d) => d.cy)
+			.attr('cy', 10)
 			.style('fill', (d) => d.fill)
 			.attr('id', (d) => d.id);
 	};
-
-	//test
-	setActiveStyle(style) {
-		this.activeStyle = style; 
-	}
-
 
 	//
 	//***************************************//
@@ -104,17 +95,6 @@ class Init {
 	updateActiveNodes filters the list and updates the inactive style list
 	*/
 	updateActiveNodes(cb) {
-		console.log('activeStyle', this.inactiveStyle)
-		var changes = false;
-		this.activeStyle = this.activeStyle.filter((d) => {
-			if (d.active === 1) {
-				changes = changes === false ? true: changes;
-				this.addInactiveNode(d);
-				return false;
-			}
-			return true;
-		});
-
 		return this.reDraw(cb);
 	};
 
@@ -126,39 +106,52 @@ class Init {
 	*/
 	reDraw(cb) {
 		//update active model
-		// this.activeModel = this.Container.selectAll(this.activeClass)
-		// 	.data(this.activeStyle)
-		// 	.enter()
-		// 	.append('svg:circle');
+		//bind updated active style data
+		this.activeModel = this.Container.selectAll('.activeBall')
+			.data(this.ballStyle);
+
+		//remove any inactive nodes 
 		this.activeModel
-			.attr('class', this.activeClass)
+			.exit().remove();
+
+		this.activeModel
+			.enter()
+			.append('svg:circle'); //add new active nodes, if any
+
+		//update active node positions
+		this.activeModel
 			.attr('r', this.r)
+			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
 			.attr('cy', (d) => d.cy)
 			.style('fill', (d) => d.fill)
 			.attr('id', (d) => d.id);
 
 		//update inactive model
-		if (this.inactiveStyle.length > 0) {
-			// this.inactiveModel = this.Container.selectAll(this.inactiveClass)
-			// .data(this.inactiveStyle)
-			// .enter()
-			// .append('svg:circle');
+		this.inactiveModel = this.Container.selectAll('.inactiveBall')
+			.data(this.ballStyle)
+		
+		this.inactiveModel
+			.exit().remove();
 
-			this.inactiveModel
-				.attr('class', this.inactiveClass)
-				.attr('r', this.r)
-				.attr('cx', (d) => d.cx)
-				.attr('cy', (d) => d.cy)
-				.style('fill', (d) => d.fill)
-				.attr('id', (d) => d.id);
-		}
+		this.inactiveModel
+			.enter()
+			.append('svg:circle');
+
+		this.inactiveModel
+			.attr('r', this.r)
+			.attr('class', (d) => d.class)
+			.attr('cx', (d) => d.cx)
+			.attr('cy', (d) => d.cy)
+			.style('fill', (d) => d.fill)
+			.attr('id', (d) => d.id);
+
 		return cb();
 	};
 
 	//sends currently active style list
-	getActiveNodes() {
-		return this.activeStyle;
+	getNodes() {
+		return this.ballStyle;
 	};
 
 	//***************************************//
@@ -166,35 +159,28 @@ class Init {
 
 	//cue ball node is always set to index 0 in active style list, returns vector position
 	getCueBallPosition() {
-		return new Victor.fromArray([this.activeStyle[0].cx, this.activeStyle[0].cy]);
+		return new Victor.fromArray([this.ballStyle[0].cx, this.ballStyle[0].cy]);
 	};
 
 	/*
-	Node to be removed from play is identified by its unique id. Its velocity property, if any,
-	is also removed
+	Node to be removed from play is identified by its unique id.
+	Ball status is defined by its class, therefore changing its class attributes toggles
+	in play vs not
 	*/
 	removeNode(id) {
-		console.log('removeNode', id)
-		let activeStyle = this.activeStyle.map((d) => {
-			if (d.id === id) {
-				d.active = 1;
+		var index = 0;
+		while (index < this.ballStyle.length) {
+			if (this.ballStyle[index].id === id) {
+				let node = this.ballStyle[index];
+				node = "inactiveBall";
+				node.cx = 100 + 20 * this.inactiveNum;
+				node.cy = 10;
+				this.inactiveNum++;
+				break;
 			}
-			return d;
-		});
-		this.setActiveStyle(activeStyle);
+		}
+		return this.ballStyle;
 	};
-
-	/*
-	Inactive node is added to the inactive ball list, its new cx and cy are calculated according
-	to its position in list.
-	*/
-	addInactiveNode(node) {
-		node.cx = 80 + 20 * this.inactiveNum;
-		node.cy = 10;
-		this.inactiveStyle.push(node);
-		this.inactiveNum++;
-		return this.inactiveStyle;
-	}
 };
 
 module.exports = {
