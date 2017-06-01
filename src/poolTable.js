@@ -48,16 +48,21 @@ class Init {
 	}
 
 	setEvent(event, cb) {
-		return this.model.on(event, cb);
+		//temporary fix
+		this.model.on(event[0], cb[0])
+							.on(event[1], cb[1]);
+		return this.model;
 	}
 
 	getMouseCoordinates() {
 		return new Victor(d3.mouse(this.model._groups[0][0]));
 	}
 
-	
+	getModel() {
+		return this.model;
+	}
 }
 
 module.exports = {
-	init: Init
+	Init: Init
 }

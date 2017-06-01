@@ -1,9 +1,9 @@
 /*Dependencies*/
-var TableModel = require('./poolTable.js');
-var PocketModel = require('./poolPocket.js');
-var PowerModel = require('./powerGrid.js');
-var BallModel = require('./poolBall.js');
-var ControlModel = require('./gameControl.js');
+const TableModel = require('./poolTable.js');
+const PocketModel = require('./poolPocket.js');
+const PowerModel = require('./powerGrid.js');
+const BallModel = require('./poolBall.js');
+const ControlModel = require('./gameController.js');
 /////////////////////////////////////////////////////////////////////////////
 class Init {
 	constructor(HTMLcontainer) {
@@ -14,7 +14,6 @@ class Init {
 		this.Table = null;
 		this.Pocket = null;
 		this.PoolBalls = null;
-		this.GameControl = null;
 	}
 
 	/*
@@ -32,20 +31,19 @@ class Init {
 		this.Table.setUp();
 
 		//game pocket contains a selection of svg:circle elements inserted into game table svg container
-		this.Pocket = new PocketModel.Init(this.Table);
+		this.Pocket = new PocketModel.Init(this.Table.getModel());
 		this.Pocket.setUp();
 
 		///power grid contains two svg:rect elements inserted into game table svg container
-		this.PowerGrid = new PowerModel.Init(this.Table);
+		this.PowerGrid = new PowerModel.Init(this.Table.getModel());
 		this.PowerGrid.setUp();
 
 		//ball contains a selection of svg:circle elements inserted into game table svg container 
-		this.Ball = new ballModel.Init(this.Table);
+		this.Ball = new BallModel.Init(this.Table.getModel());
 		this.Ball.setUp();
 	
 		//game control assigns game logic to game objects
-		this.GameControl = new ControlModel.Init(this.Table, this.Pocket, this.PowerGrid, this.Ball)
-		this.GameControl.setUp();
+		ControlModel.setUp(this.Table, this.PowerGrid, this.Ball)
 	}
 }	
 

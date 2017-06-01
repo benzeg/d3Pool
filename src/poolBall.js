@@ -2,7 +2,7 @@
 const Victor = require('victor');
 /////////////////////////////////////////////////////////////////////////////
 
-class Ball {
+class Init {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.activeClass = 'activeBall';
@@ -55,7 +55,6 @@ class Ball {
 		this.inactiveModel = null; //balls removed from play (pocketed)
 
 		//CACHE
-		this.velocity = {};
 		this.inactiveNum = 0;
 	};
 
@@ -84,9 +83,8 @@ class Ball {
 	this is based on the 'active' property of each node.
 	updateActiveNodes filters the list and updates the inactive style list
 	*/
-	updateActiveNodes() {
-		let changes = false;
-		let newActiveStyle = this.activeStyle.filter((d) => {
+	updateActiveNodes(cb) {
+		this.activeStyle = this.activeStyle.filter((d) => {
 			if (d.active === 1) {
 				changes = changes === false ? true: changes;
 				this.addInactiveNode(d);
@@ -94,7 +92,8 @@ class Ball {
 			}
 			return true;
 		});
-		changes === false ? return false: return this.activeStyle = newActiveStyle;
+
+		return this.reDraw(cb);
 	};
 
 	/*
@@ -119,7 +118,7 @@ class Ball {
 			.attr('id', (d) => d.id);
 
 		//update inactive model
-		if (inactiveModel.length > 0) {
+		if (this.inactiveStyle.length > 0) {
 			this.inactiveModel = this.Container.selectAll(this.inactiveClass)
 			.data(this.inactiveStyle)
 			.enter()

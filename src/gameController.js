@@ -10,9 +10,9 @@ const setUp = (Table, PowerGrid, Ball) => {
 	Event to trigger when mouse is held down to charge cue power
 	Increase power grid level at a set interval
 	*/
-
+	let powerUp;
 	const mouseHold = () => {
-		this.powerUp = setInterval(() => {
+		powerUp = setInterval(() => {
 			PowerGrid.increaseMagnitude();
 		}, 10);
 	}
@@ -23,7 +23,7 @@ const setUp = (Table, PowerGrid, Ball) => {
 	*/
 	const mouseRelease = () => {
 		//clear power up interval and reset magnitude
-		clearInterval(this.powerUp);
+		clearInterval(powerUp);
 		PowerGrid.resetMagnitude();
 		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
@@ -39,14 +39,14 @@ const setUp = (Table, PowerGrid, Ball) => {
 		Each tick event triggers a call to Ball svgs' positions on screen
 		*/
 		let nodes = Ball.getActiveNodes();
-		Simulation.init(nodes, cueForce, Ball.updateActiveNodes);
+		//**todo refactor Simulation to class
+		Simulation.Init(nodes, cueForce, (cb) => { return Ball.updateActiveNodes(cb); }, (id) => {return Ball.removeNode(id)});
 	}
 
 	/*
 	Add events to table svg
 	*/
-	Table.setEvent('mousedown', mouseHold)
-			 .setEvent('mouseup', mouseRelease);
+	Table.setEvent(['mousedown', 'mouseup'], [mouseHold, mouseRelease]);
 }
 
 module.exports = {

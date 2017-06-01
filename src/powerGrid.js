@@ -1,9 +1,9 @@
 /*Dependencies*/
-var Victor = require('victor'); //vector library
+const Victor = require('victor'); //vector library
 
 /*CODE*/
 class Init {
-	constructor(SVGContainer) {
+	constructor(SVGcontainer) {
 		//STYLING
 		this.gridStyle = {
 			height: 240,
@@ -24,30 +24,30 @@ class Init {
 
 		//SVGs
 		this.Container = SVGcontainer;
-		this.powerGrid = null;
-		this.powerLevel = null;
+		this.magnitudeGrid = null;
+		this.magnitudeLevel = null;
 
 		//CACHE
 		this.maxVelocity = 300; //preset max velocity of 300px/sec
-		this.currentPower = null;
+		this.currentMagnitude = null;
 	}
 
 	/*
-	Generates new power grid svg and adds to pool table svg.
+	Generates new magnitude grid svg and adds to pool table svg.
 	Grid is set up to include an outer rectangular box with set height and white background
 	and an inner grid with initial height of 0, inner grid's height increases dynamically
-	to reflect a cue hit's power level.
+	to reflect a cue hit's magnitude level.
 	*/
 	setUp() {
 		//populate SVG models
-		this.powerGrid = this.Container.append('svg:rect')
+		this.magnitudeGrid = this.Container.append('svg:rect')
 			.attr('x', this.positionStyle.x)
 			.attr('y', this.positionStyle.y)
 			.attr('height', this.gridStyle.height)
 			.attr('width', this.gridStyle.width)
 			.attr('fill', this.gridStyle.fill);
 
-		this.powerLevel = this.Container.append('svg:rect')
+		this.magnitudeLevel = this.Container.append('svg:rect')
 			.attr('x', this.positionStyle.x)
 			.attr('y', this.positionStyle.y)
 			.attr('height', this.levelStyle.height)
@@ -55,29 +55,35 @@ class Init {
 			.attr('fill', this.levelStyle.fill)
 
 		//populate cache
-		this.currentPower = 0;
-		this.maxPower = this.gridStyle.height;
+		this.currentMagnitude = 0;
+		this.maxmagnitude = this.gridStyle.height;
 
-		return;
+		return this.magnitudeLevel;
 	}
 
-	//converts current power level to velocity vector by comparing current power level to max power level
-	getPower() {
-		let v = (this.currentPower / this.maxPower) * this.maxVelocity;
-		let velocityVec = new Victor.fromArray([v, v]);
-		return velocityVec;
+	//calculates force magnitude by comparing current magnitude level to max level
+	getMagnitude() {
+		return (this.currentMagnitude / this.maxmagnitude) * this.maxVelocity;
 	}
 
-	//increases power level
-	incrementPower() {
-		if (this.currentPower === this.powerGrid.attr('height')) {
-			return 'Error: At maximum power';
+	//increases magnitude
+	increaseMagnitude() {
+		if (this.currentMagnitude === this.magnitudeGrid.attr('height')) {
+			return 'Error: At maximum magnitude';
 		}
-		//only increment while less than max power
-		this.currentPower = this.powerLevel.attr('height'); //update cache
-		this.powerLevel.attr('height', this.currentPower++);
-		return this.currentPower;
+		//only increment while less than max magnitude
+		this.currentMagnitude = this.magnitudeLevel.attr('height'); //update cache
+		this.magnitudeLevel.attr('height', this.currentMagnitude++);
+		return this.currentMagnitude;
 	}
+
+	//resets magnitude
+	resetMagnitude() {
+		this.currentMagnitude = 0;
+		this.magnitudeLevel.attr('height', this.currentMagnitude);
+		return this.currentMagnitude;
+	}
+
 }
 
 module.exports = {
