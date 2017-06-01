@@ -2,19 +2,20 @@
 const Victor = require('victor');
 const ForceSimulation = require('./forceSimulation.js').forceSimulation;
 ////////////////////////////////////////////////////////////////
-
-const Init = (nodes, cueForce, tickEvent) => {
+//** todo refactor to class
+const Init = (nodes, cueForce, tickEvent, catchEvent) => {
 	const cb = function() {
 		simulation.resume();
 	}
 
 	const simulation = new ForceSimulation();
 	simulation.addNodes(nodes)
-						.on('tick', () => { tickEvent(cb); });
+						.on('tick', () => { tickEvent(cb); })
+						.on('catch', () => { catchEvent(); });
 
 	simulation.applyForce(cueForce);
 }
 
 module.exports = {
-	init: Init
+	Init: Init
 }
