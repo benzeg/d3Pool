@@ -160,6 +160,7 @@ class forceSimulation {
 			if (node.cx < 56.25) {
 				if (node.cy < 56.25 || node.cy > 578) {
 					//pocket in
+					console.log('catch node', node.id)
 					this.emit('catch', node.id);
 				} else {
 					node.cx = 56.25;

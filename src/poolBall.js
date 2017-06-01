@@ -74,8 +74,28 @@ class Init {
 			.attr('cy', (d) => d.cy)
 			.style('fill', (d) => d.fill)
 			.attr('id', (d) => d.id);
+
+		this.inactiveModel = this.Container.selectAll(this.inactiveClass)
+			.data(this.inactiveStyle)
+			.enter()
+			.append('svg:circle');
+
+		this.inactiveModel
+			.attr('class', this.inactiveClass)
+			.attr('r', this.r)
+			.attr('cx', (d) => d.cx)
+			.attr('cy', (d) => d.cy)
+			.style('fill', (d) => d.fill)
+			.attr('id', (d) => d.id);
 	};
 
+	//test
+	setActiveStyle(style) {
+		this.activeStyle = style; 
+	}
+
+
+	//
 	//***************************************//
 	//Group functions
 	/*
@@ -84,6 +104,8 @@ class Init {
 	updateActiveNodes filters the list and updates the inactive style list
 	*/
 	updateActiveNodes(cb) {
+		console.log('activeStyle', this.inactiveStyle)
+		var changes = false;
 		this.activeStyle = this.activeStyle.filter((d) => {
 			if (d.active === 1) {
 				changes = changes === false ? true: changes;
@@ -104,11 +126,10 @@ class Init {
 	*/
 	reDraw(cb) {
 		//update active model
-		this.activeModel = this.Container.selectAll(this.activeClass)
-			.data(this.activeStyle)
-			.enter()
-			.append('svg:circle');
-
+		// this.activeModel = this.Container.selectAll(this.activeClass)
+		// 	.data(this.activeStyle)
+		// 	.enter()
+		// 	.append('svg:circle');
 		this.activeModel
 			.attr('class', this.activeClass)
 			.attr('r', this.r)
@@ -119,10 +140,10 @@ class Init {
 
 		//update inactive model
 		if (this.inactiveStyle.length > 0) {
-			this.inactiveModel = this.Container.selectAll(this.inactiveClass)
-			.data(this.inactiveStyle)
-			.enter()
-			.append('svg:circle');
+			// this.inactiveModel = this.Container.selectAll(this.inactiveClass)
+			// .data(this.inactiveStyle)
+			// .enter()
+			// .append('svg:circle');
 
 			this.inactiveModel
 				.attr('class', this.inactiveClass)
@@ -153,14 +174,14 @@ class Init {
 	is also removed
 	*/
 	removeNode(id) {
-		this.activeStyle = this.activeStyle.map((d, index) => {
+		console.log('removeNode', id)
+		let activeStyle = this.activeStyle.map((d) => {
 			if (d.id === id) {
 				d.active = 1;
-				if(this.velocity[id]) {
-					delete this.velocity[id];
-				}
 			}
+			return d;
 		});
+		this.setActiveStyle(activeStyle);
 	};
 
 	/*

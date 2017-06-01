@@ -28,9 +28,8 @@ const setUp = (Table, PowerGrid, Ball) => {
 			.getCueBallPosition()
 			.subtract(Table.getMouseCoordinates())
 			.normalize();
-		console.log(cueDirection)
+
 		let cueForce = VecUtil.scalarToVec(PowerGrid.getMagnitude(), cueDirection);
-		console.log(cueForce)
 		//clear power up interval and reset magnitude
 		clearInterval(powerUp);
 		PowerGrid.resetMagnitude();
