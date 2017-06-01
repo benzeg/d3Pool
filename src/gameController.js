@@ -22,6 +22,10 @@ const setUp = (Table, PowerGrid, Ball) => {
 	Calls on a chain of position calculation and update events to update svg positions
 	*/
 	const mouseRelease = () => {
+		//clear power up interval and reset magnitude
+		clearInterval(this.powerUp);
+		PowerGrid.resetMagnitude();
+		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
 			.getCueBallPosition()
 			.subtract(Table.getMouseCoordinates())
@@ -29,6 +33,10 @@ const setUp = (Table, PowerGrid, Ball) => {
 
 		let cueForce = VecUtil.scalarToVec(PowerGrid.getMagnitude(), cueDirection);
 
-		
+		//apply force to cue ball and update nodes' positions
+
+
+		//
+
 	}
 }
