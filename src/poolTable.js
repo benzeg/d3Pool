@@ -51,11 +51,12 @@ class Init {
 		//temporary fix
 		this.model.on(event[0], cb[0])
 							.on(event[1], cb[1]);
+		console.log('table set event', this.model)
 		return this.model;
 	}
 
 	getMouseCoordinates() {
-		return new Victor(d3.mouse(this.model._groups[0][0]));
+		return new Victor.fromArray(d3.mouse(this.model._groups[0][0]));
 	}
 
 	getModel() {

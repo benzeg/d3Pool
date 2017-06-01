@@ -12,7 +12,7 @@ const Init = (nodes, cueForce, tickEvent, catchEvent) => {
 	simulation.addNodes(nodes)
 						.on('tick', () => { tickEvent(cb); })
 						.on('catch', () => { catchEvent(); });
-
+	console.log(cueForce)
 	simulation.applyForce(cueForce);
 }
 

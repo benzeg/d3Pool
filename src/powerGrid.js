@@ -29,7 +29,7 @@ class Init {
 
 		//CACHE
 		this.maxVelocity = 300; //preset max velocity of 300px/sec
-		this.currentMagnitude = null;
+		this.currentMagnitude = 0;
 	}
 
 	/*
@@ -55,26 +55,24 @@ class Init {
 			.attr('fill', this.levelStyle.fill)
 
 		//populate cache
-		this.currentMagnitude = 0;
-		this.maxmagnitude = this.gridStyle.height;
+		this.maxMagnitude = this.gridStyle.height;
 
 		return this.magnitudeLevel;
 	}
 
 	//calculates force magnitude by comparing current magnitude level to max level
 	getMagnitude() {
-		return (this.currentMagnitude / this.maxmagnitude) * this.maxVelocity;
+		return (this.currentMagnitude / this.maxMagnitude) * this.maxVelocity;
 	}
 
 	//increases magnitude
 	increaseMagnitude() {
-		if (this.currentMagnitude === this.magnitudeGrid.attr('height')) {
+		if (this.currentMagnitude === this.maxMagnitude) {
 			return 'Error: At maximum magnitude';
 		}
 		//only increment while less than max magnitude
-		this.currentMagnitude = this.magnitudeLevel.attr('height'); //update cache
-		this.magnitudeLevel.attr('height', this.currentMagnitude++);
-		return this.currentMagnitude;
+		this.currentMagnitude++; //update cache
+		this.magnitudeLevel.attr('height', this.currentMagnitude);
 	}
 
 	//resets magnitude
@@ -83,7 +81,6 @@ class Init {
 		this.magnitudeLevel.attr('height', this.currentMagnitude);
 		return this.currentMagnitude;
 	}
-
 }
 
 module.exports = {
