@@ -1,5 +1,6 @@
 /*Dependencies*/
-var d3 = require('d3');
+const d3 = require('d3');
+const Victor = require('victor');
 /////////////////////////////////////////////////////////////////////////////
 class Init {
 	constructor(container) {
@@ -46,15 +47,17 @@ class Init {
 		return this.model;
 	}
 
-	getMouseCoordinates() {
-		return d3.mouse(this.model._groups[0][0]);
+	setEvent(event, cb) {
+		return this.model.on(event, cb);
 	}
 
-	getModel() {
-		return this.model;
+	getMouseCoordinates() {
+		return new Victor(d3.mouse(this.model._groups[0][0]));
 	}
+
+	
 }
 
 module.exports = {
-	Init: Init
+	init: Init
 }
