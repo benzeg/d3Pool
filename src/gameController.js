@@ -1,7 +1,7 @@
 /*Dependencies*/
 const Victor = require('victor');
 const VecUtil = require('./vectorUtil/vectorLib.js');
-const SetForce = require('./simulation.js').setForce;
+const Simulation = require('./simulation.js');
 /////////////////////////////////////////////////////////////////////////////
 
 const setUp = (Table, PowerGrid, Ball) => {
@@ -33,10 +33,22 @@ const setUp = (Table, PowerGrid, Ball) => {
 
 		let cueForce = VecUtil.scalarToVec(PowerGrid.getMagnitude(), cueDirection);
 
-		//apply force to cue ball and update nodes' positions
-
-
-		//
-
+		/*
+		Initiate 2D elastic collision simulation with nodes, force, and callback function to act
+		on each tick of simulation event
+		Each tick event triggers a call to Ball svgs' positions on screen
+		*/
+		let nodes = Ball.getActiveNodes();
+		Simulation.init(nodes, cueForce, Ball.updateActiveNodes);
 	}
+
+	/*
+	Add events to table svg
+	*/
+	Table.setEvent('mousedown', mouseHold)
+			 .setEvent('mouseup', mouseRelease);
+}
+
+module.exports = {
+	setUp: setUp
 }
