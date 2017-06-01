@@ -71,40 +71,16 @@ class Init {
 			.attr('cy', (d) => d.cy)
 			.style('fill', (d) => d.fill)
 			.attr('id', (d) => d.id);
-
-		this.inactiveModel = this.Container.selectAll('.inactiveBall')
-			.data(this.inactiveStyle)
-			.enter()
-			.append('svg:circle');
-
-		this.inactiveModel
-			.attr('r', this.r)
-			.attr('class', (d) => d.class)
-			.attr('cx', (d) => d.cx)
-			.attr('cy', 10)
-			.style('fill', (d) => d.fill)
-			.attr('id', (d) => d.id);
 	};
 
 	//
 	//***************************************//
 	//Group functions
 	/*
-	At this point each node in active style list has been updated with their active status,
-	this is based on the 'active' property of each node.
-	updateActiveNodes filters the list and updates the inactive style list
+	At this point each node has their properties updated with new positions and in play status
+	updateModels then binds this updated data to redraw each selection.
 	*/
-	updateActiveNodes(cb) {
-		return this.reDraw(cb);
-	};
-
-	/*
-	At this point pocketed balls should have their styles removed from
-	active style list and placed in inactive style list.
-	reDraw then binds this updated data to active and inactive models to
-	update each selection.
-	*/
-	reDraw(cb) {
+	updateModels(cb) {
 		//update active model
 		//bind updated active style data
 		this.activeModel = this.Container.selectAll('.activeBall')
@@ -167,7 +143,7 @@ class Init {
 	Ball status is defined by its class, therefore changing its class attributes toggles
 	in play vs not
 	*/
-	removeNode(id) {
+	updateNode(id) {
 		var index = 0;
 		while (index < this.ballStyle.length) {
 			if (this.ballStyle[index].id === id) {
