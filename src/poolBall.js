@@ -122,7 +122,7 @@ class Init {
 
 	//sends currently active style list
 	getNodes() {
-		return this.ballStyle;
+		return this.ballStyle.filter((d) => {return d.class === "activeBall";});
 	};
 
 	//***************************************//
@@ -140,16 +140,18 @@ class Init {
 	*/
 	updateNode(id) {
 		var index = 0;
+		console.log('in ball updatenode', id)
 		while (index < this.ballStyle.length) {
 			if (this.ballStyle[index].id === id) {
-				let node = this.ballStyle[index];
-				node.class = "inactiveBall";
-				node.cx = 100 + 20 * this.inactiveNum;
-				node.cy = 20;
+				this.ballStyle[index].class = "inactiveBall";
+				this.ballStyle[index].cx = 100 + 40 * this.inactiveNum;
+				this.ballStyle[index].cy = 20;
 				this.inactiveNum++;
 				break;
 			}
+			index++;
 		}
+		console.log(this.ballStyle)
 		return this.ballStyle;
 	};
 };
