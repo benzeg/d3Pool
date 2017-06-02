@@ -6,9 +6,7 @@ class forceSimulation {
 		this.events = {};
 		this.timeVec = new Victor(0.1, 0.1);
 		this.friction = new Victor(1, 1);
-		this.forceVec = [];
-		//**refactor to bitwise operation
-		this.moved = [];
+		this.forceVec = {};
 		this.run = true;
 	}
 
@@ -31,19 +29,20 @@ class forceSimulation {
 		this.run = false;
 	}
 
-	addNodes(nodes) {
-		this.nodes = nodes;
-		//***refactor to bitwise operation
-		var i = 0;
-		while (i < this.nodes.length) {
-			this.moved.push(0);
-			i++;
-		}
+	addNodes(Ball) {
+		this.Ball = Ball;
+		this.nodes = this.Ball.getNodes();
 		return this;
 	}
 
+	updateNodes() {
+		this.nodes = this.Ball.getNodes();
+		console.log(this.nodes);
+		return this.nodes;
+	}
+
 	applyForce(forceVec) {
-		this.forceVec.push(forceVec);
+		this.forceVec.cueBall = forceVec;
 		this.move = setInterval(() => {
 			if(this.run) {
 				if (!this.checkForceVec()) {
@@ -51,27 +50,23 @@ class forceSimulation {
 				} else {
 					this.pause();
 					//apply force vector to node position
+					this.nodes = this.updateNodes();
+					this.moved = [];
 					this.nodes.forEach((node, index) => {
-						if (this.forceVec[index]) {
+						let id = node.id;
+						if (this.forceVec[id] !== undefined) {
 							//calculate translation vector here
-							var transVec = this.forceVec[index].clone().multiply(this.timeVec);
+							var transVec = this.forceVec[id].clone().multiply(this.timeVec);
 							node.cx += transVec.x;
 							node.cy += transVec.y;
 							//moved marks if a node has an active movement at the present time
 							this.moved[index] = 1;
 							//apply friction to force vector
-							var friction = this.forceVec[index].clone().normalize().multiply(this.friction);
-							if (Math.ceil(this.forceVec[index].clone().divide(this.friction).x) === 0) {
-								this.forceVec[index].x = 0;
-								this.forceVec[index].y = 0;
-							} else {
-								this.forceVec[index].subtract(friction);
-							}
+							var friction = this.forceVec[id].clone().normalize().multiply(this.friction);
+							this.forceVec[id].subtract(friction);
 							//remove force vector if it becomes stationary
-							if (Math.floor(Math.abs(this.forceVec[index].x)) === 0 && Math.floor(Math.abs(this.forceVec[index].y)) === 0) {
-								this.forceVec[index] = undefined;
-								this.moved[index] = 0;
-							}
+							console.log('this.forceVec', this.forceVec)
+							this.forceVec[id] = this.forceVec[id].length() < 1 ? undefined: this.forceVec[id];
 						}
 						//check that all nodes have been traversed
 						if (index === this.nodes.length -1) {
@@ -90,15 +85,18 @@ class forceSimulation {
 
 	checkCollisions(cb) {
 		var counter = 0;
-		this.nodes.forEach((node, index) => {
+		return this.nodes.forEach((node, index) => {
 			//check ball to ball collision
-			this.b2bCollision(index, () => {
-				counter++;
-			});
-			this.moved[index] = 0;
+			if (this.forceVec[node.id] !== undefined) {
+					this.b2bCollision(index, () => {
+						counter++;
+						if (counter === this.nodes.length) {
+							return this.b2wCollision(cb);
+						}
+					});
+			} else counter++;
 			if (counter === this.nodes.length) {
-				//check ball to wall collision
-				this.b2wCollision(cb);
+				return this.b2wCollision(cb);
 			}
 		});
 	}
@@ -109,6 +107,7 @@ class forceSimulation {
 			var cx1 = this.nodes[currIndex].cx;
 			var cy1 = this.nodes[currIndex].cy;
 			var collide = false;
+			var ballA = this.nodes[currIndex].id;
 			for (var index = 0; index < this.nodes.length; index++) {
 				if (index !== currIndex) {
 					//two circles collide if Square(r1 + r2) < Square(x1 - x2) + Sqaure(y1 - y2)
@@ -116,6 +115,7 @@ class forceSimulation {
 					var cx2 = this.nodes[index].cx;
 					var cy2 = this.nodes[index].cy;
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
+					var ballB = this.nodes[index].id;
 					if ((32.5) >= distance) {
 						//perfect elastic collision
 						collide = true;
@@ -125,14 +125,14 @@ class forceSimulation {
 						newVec.normalize();
 						//translate current force vector magnitude to new force vector
 							//hacky right now and just multiplies both x and y vectors by magnitude
-						var magnitude = this.forceVec[currIndex].length();
+						var magnitude = this.forceVec[ballA].length();
 						newVec.x *= magnitude;
 						newVec.y *= magnitude;
 						//add vectors if ball B is already in motion, otherwise set ball B force vector to new force vector
-						if (this.forceVec[index]) {
-							this.forceVec[index].add(newVec);
+						if (this.forceVec[ballB] !== undefined) {
+							this.forceVec[ballB].add(newVec);
 						} else {
-							this.forceVec[index] = newVec;
+							this.forceVec[ballB] = newVec;
 						}
 					}
 				}
@@ -142,7 +142,7 @@ class forceSimulation {
 				if (index === this.nodes.length -1) {
 					if (collide) {
 						var reflectVec = new Victor.fromArray([0.2, 0.2]);
-						this.forceVec[currIndex].invert().multiply(reflectVec);
+						this.forceVec[ballA].invert().multiply(reflectVec);
 					}
 					return cb();
 				}
@@ -157,53 +157,55 @@ class forceSimulation {
 		//i) reflect axis that touches bound
 		//ii) decrease returned force by 30% to account for wall absorption	
 		this.nodes.forEach((node, index) => {
-			if (node.cx < 58) {
-				if (node.cy < 58 || node.cy > 582) {
+			let id = node.id;
+			if (node.cx < 57) {
+				if (node.cy < 57 || node.cy > 583) {
 					//pocket in
 					this.emit('catch', node.id);
-					return cb();
 				} else {
 					node.cx = 56.25;
-					this.forceVec[index].x *= -0.7;
+					if(this.forceVec[id]) {
+						this.forceVec[id].x *= -0.7;
+					}
 				}
 			} else if (node.cx > 1142) {
-				if (node.cy < 58 || node.cy > 582) {
+				if (node.cy < 57 || node.cy > 583) {
 					//pocket in
 					this.emit('catch', node.id);
-					return cb();
 				} else {
 					node.cx = 1143.75;
-					this.forceVec[index].x *= -0.7;
+					if(this.forceVec[id]) {
+						this.forceVec[id].x *= -0.7;
+					}
 				}
-			} else if (node.cy < 58) {
+			} else if (node.cy < 57) {
 				if (node.cx >= 595 && node.cx <= 605) {
 					//pocket in
 					this.emit('catch', node.id);
-					return cb();
 				} else {
 					node.cy = 56.25;
-					this.forceVec[index].y *= -0.7;
+					if(this.forceVec[id]) {
+						this.forceVec[id].y *= -0.7;
+					}
 				}
-			} else if (node.cy > 582) {
-				if (node.cx >= 595 && node.cx <= 605) {
+			} else if (node.cy > 583) {
+				if (node.cx >= 595 && node.cx <= 603.75) {
 					//pocket in
 					this.emit('catch', node.id);
-					return cb();
 				} else {
 					node.cy = 583.75;
-					this.forceVec[index].y *= -0.7;
+					if(this.forceVec[id]) {
+						this.forceVec[id].y *= -0.7;
+					}
 				}
 			}
-
-			if (index === this.nodes.length -1) {
-				return cb();
-			}
 		});
+		return cb();
 	}
 
 	checkForceVec() {
-		for (var i = 0; i < this.forceVec.length; i++) {
-			if (this.forceVec[i] !== undefined) {
+		for (var key in this.forceVec) {
+			if (this.forceVec[key] !== undefined) {
 				return true;
 			}
 		}
