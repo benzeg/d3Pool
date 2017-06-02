@@ -157,8 +157,8 @@ class forceSimulation {
 		//i) reflect axis that touches bound
 		//ii) decrease returned force by 30% to account for wall absorption	
 		this.nodes.forEach((node, index) => {
-			if (node.cx < 56.25) {
-				if (node.cy < 56.25 || node.cy > 578) {
+			if (node.cx < 58) {
+				if (node.cy < 58 || node.cy > 582) {
 					//pocket in
 					this.emit('catch', node.id);
 					return cb();
@@ -166,8 +166,8 @@ class forceSimulation {
 					node.cx = 56.25;
 					this.forceVec[index].x *= -0.7;
 				}
-			} else if (node.cx > 1143.75) {
-				if (node.cy < 58 || node.cy > 578) {
+			} else if (node.cx > 1142) {
+				if (node.cy < 58 || node.cy > 582) {
 					//pocket in
 					this.emit('catch', node.id);
 					return cb();
@@ -175,8 +175,8 @@ class forceSimulation {
 					node.cx = 1143.75;
 					this.forceVec[index].x *= -0.7;
 				}
-			} else if (node.cy < 56.25) {
-				if (node.cx >= 596.25 && node.cx <= 603.75) {
+			} else if (node.cy < 58) {
+				if (node.cx >= 595 && node.cx <= 605) {
 					//pocket in
 					this.emit('catch', node.id);
 					return cb();
@@ -184,8 +184,8 @@ class forceSimulation {
 					node.cy = 56.25;
 					this.forceVec[index].y *= -0.7;
 				}
-			} else if (node.cy > 583.75) {
-				if (node.cx >= 596.25 && node.cx <= 603.75) {
+			} else if (node.cy > 582) {
+				if (node.cx >= 595 && node.cx <= 605) {
 					//pocket in
 					this.emit('catch', node.id);
 					return cb();
