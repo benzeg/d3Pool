@@ -106,13 +106,8 @@ class Init {
 		//update inactive model
 		this.inactiveModel = this.Container.selectAll('.inactiveBall')
 			.data(this.ballStyle.filter((d) => {return d.class === "inactiveBall"}))
-		
-		this.inactiveModel
-			.exit().remove();
-
-		this.inactiveModel
 			.enter()
-			.append('svg:circle');
+			.append('svg:circle')
 
 		this.inactiveModel
 			.attr('r', this.r)
@@ -150,7 +145,7 @@ class Init {
 				let node = this.ballStyle[index];
 				node.class = "inactiveBall";
 				node.cx = 100 + 20 * this.inactiveNum;
-				node.cy = 10;
+				node.cy = 20;
 				this.inactiveNum++;
 				break;
 			}
