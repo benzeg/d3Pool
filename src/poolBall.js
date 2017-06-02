@@ -6,7 +6,7 @@ class Init {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.r = 16.25;
-		this.ballStyle = [
+		this.activeBall = [
 			{'cx': 320,
 			 'cy': 320,
 			 'fill': "#ffffff",
@@ -53,6 +53,7 @@ class Init {
 
 		//CACHE
 		this.inactiveNum = 0;
+		this.inactiveBall = [];
 	};
 
 	/*
@@ -60,7 +61,7 @@ class Init {
 	*/
 	setUp() {
 		this.activeModel = this.Container.selectAll('.activeBall')
-			.data(this.ballStyle)
+			.data(this.activeBall)
 			.enter()
 			.append('svg:circle');
 
@@ -84,7 +85,7 @@ class Init {
 		//update active model
 		//bind model with active nodes
 		this.activeModel = this.Container.selectAll('.activeBall')
-			.data(this.ballStyle.filter((d) => { return d.class === "activeBall"}));
+			.data(this.activeBall);
 
 		//remove any inactive nodes 
 		this.activeModel
@@ -105,7 +106,7 @@ class Init {
 
 		//update inactive model
 		this.inactiveModel = this.Container.selectAll('.inactiveBall')
-			.data(this.ballStyle.filter((d) => {return d.class === "inactiveBall"}))
+			.data(this.inactiveBall)
 			.enter()
 			.append('svg:circle')
 
@@ -121,8 +122,8 @@ class Init {
 	};
 
 	//sends currently active style list
-	getNodes() {
-		return this.ballStyle.filter((d) => {return d.class === "activeBall";});
+	getActiveNodes() {
+		return this.activeBall;
 	};
 
 	//***************************************//
@@ -130,7 +131,7 @@ class Init {
 
 	//cue ball node is always set to index 0 in active style list, returns vector position
 	getCueBallPosition() {
-		return new Victor.fromArray([this.ballStyle[0].cx, this.ballStyle[0].cy]);
+		return new Victor.fromArray([this.activeBall[0].cx, this.activeBall[0].cy]);
 	};
 
 	/*
@@ -139,20 +140,17 @@ class Init {
 	in play vs not
 	*/
 	updateNode(id) {
-		var index = 0;
-		console.log('in ball updatenode', id)
-		while (index < this.ballStyle.length) {
-			if (this.ballStyle[index].id === id) {
-				this.ballStyle[index].class = "inactiveBall";
-				this.ballStyle[index].cx = 100 + 40 * this.inactiveNum;
-				this.ballStyle[index].cy = 20;
+		return this.activeBall = this.activeBall.filter((d) => {
+			if (d.id === id) {
+				d.class = 'inactiveBall';
+				d.cx = 80 + 40*this.inactiveNum;
+				d.cy = 20;
 				this.inactiveNum++;
-				break;
+				this.inactiveBall.push(d);
+				return false;
 			}
-			index++;
-		}
-		console.log(this.ballStyle)
-		return this.ballStyle;
+			return true;
+		})
 	};
 };
 
