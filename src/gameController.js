@@ -38,9 +38,8 @@ const setUp = (Table, PowerGrid, Ball) => {
 		on each tick of simulation event
 		Each tick event triggers a call to Ball svgs' positions on screen
 		*/
-		let nodes = Ball.getNodes();
 		//**todo refactor Simulation to class
-		Simulation.Init(nodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)});
+		Simulation.Init(Ball, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)});
 	}
 
 	/*
