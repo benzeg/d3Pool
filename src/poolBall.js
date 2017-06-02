@@ -82,9 +82,9 @@ class Init {
 	*/
 	updateModels(cb) {
 		//update active model
-		//bind updated active style data
+		//bind model with active nodes
 		this.activeModel = this.Container.selectAll('.activeBall')
-			.data(this.ballStyle);
+			.data(this.ballStyle.filter((d) => { return d.class === "activeBall"}));
 
 		//remove any inactive nodes 
 		this.activeModel
@@ -105,7 +105,7 @@ class Init {
 
 		//update inactive model
 		this.inactiveModel = this.Container.selectAll('.inactiveBall')
-			.data(this.ballStyle)
+			.data(this.ballStyle.filter((d) => {return d.class === "inactiveBall"}))
 		
 		this.inactiveModel
 			.exit().remove();
@@ -148,7 +148,7 @@ class Init {
 		while (index < this.ballStyle.length) {
 			if (this.ballStyle[index].id === id) {
 				let node = this.ballStyle[index];
-				node = "inactiveBall";
+				node.class = "inactiveBall";
 				node.cx = 100 + 20 * this.inactiveNum;
 				node.cy = 10;
 				this.inactiveNum++;

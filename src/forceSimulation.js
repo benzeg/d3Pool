@@ -160,8 +160,8 @@ class forceSimulation {
 			if (node.cx < 56.25) {
 				if (node.cy < 56.25 || node.cy > 578) {
 					//pocket in
-					console.log('catch node', node.id)
 					this.emit('catch', node.id);
+					return cb();
 				} else {
 					node.cx = 56.25;
 					this.forceVec[index].x *= -0.7;
@@ -170,6 +170,7 @@ class forceSimulation {
 				if (node.cy < 58 || node.cy > 578) {
 					//pocket in
 					this.emit('catch', node.id);
+					return cb();
 				} else {
 					node.cx = 1143.75;
 					this.forceVec[index].x *= -0.7;
@@ -178,6 +179,7 @@ class forceSimulation {
 				if (node.cx >= 596.25 && node.cx <= 603.75) {
 					//pocket in
 					this.emit('catch', node.id);
+					return cb();
 				} else {
 					node.cy = 56.25;
 					this.forceVec[index].y *= -0.7;
@@ -186,6 +188,7 @@ class forceSimulation {
 				if (node.cx >= 596.25 && node.cx <= 603.75) {
 					//pocket in
 					this.emit('catch', node.id);
+					return cb();
 				} else {
 					node.cy = 583.75;
 					this.forceVec[index].y *= -0.7;
