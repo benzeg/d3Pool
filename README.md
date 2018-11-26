@@ -1,1 +1,1 @@
-# learnD3
+# Pool game played in two-dimensional top down perspective.
