@@ -2,7 +2,7 @@
 
 
 /////////////////////////////////////////////////////////////////////////////
-class Init {
+export default class PoolPocket {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.style = [
@@ -51,8 +51,4 @@ class Init {
 
 		return this.model;
 	}
-}
-
-module.exports = {
-	Init: Init
 }

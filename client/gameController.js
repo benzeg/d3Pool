@@ -1,10 +1,10 @@
 /*Dependencies*/
-const Victor = require('victor');
-const VecUtil = require('./vectorUtil/vectorLib.js');
-const Simulation = require('./simulation.js');
+import * as Victor from 'victor';
+import vecUtil from './vectorUtil/vectorLib';
+import simulate from './simulation';
 /////////////////////////////////////////////////////////////////////////////
 
-const setUp = (Table, PowerGrid, Ball) => {
+export default function controller(Table, PowerGrid, Ball) {
 
 	/*
 	Event to trigger when mouse is held down to charge cue power
@@ -12,8 +12,7 @@ const setUp = (Table, PowerGrid, Ball) => {
 	*/
 	let powerUp;
 	const mouseHold = () => {
-		powerUp = setInterval(() => {
-			console.log('mouse holding')
+		powerUp = window.setInterval(() => {
 			PowerGrid.increaseMagnitude();
 		}, 10);
 	}
@@ -23,15 +22,16 @@ const setUp = (Table, PowerGrid, Ball) => {
 	Calls on a chain of position calculation and update events to update svg positions
 	*/
 	const mouseRelease = () => {
+		console.log('hello')
 		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
 			.getCueBallPosition()
 			.subtract(Table.getMouseCoordinates())
 			.normalize();
 
-		let cueForce = VecUtil.scalarToVec(PowerGrid.getMagnitude(), cueDirection);
+		let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
 		//clear power up interval and reset magnitude
-		clearInterval(powerUp);
+		window.clearInterval(powerUp);
 		PowerGrid.resetMagnitude();
 		/*
 		Initiate 2D elastic collision simulation with nodes, force, and callback function to act
@@ -40,15 +40,11 @@ const setUp = (Table, PowerGrid, Ball) => {
 		*/
 		//**todo refactor Simulation to class
 		let activeNodes = Ball.getActiveNodes();
-		Simulation.Init(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)});
+		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)});
 	}
 
 	/*
 	Add events to table svg
 	*/
 	Table.setEvent(['mousedown', 'mouseup'], [mouseHold, mouseRelease]);
-}
-
-module.exports = {
-	setUp: setUp
-}
+};

@@ -1,8 +1,8 @@
 /*Dependencies*/
-const Victor = require('victor');
+import * as Victor from 'victor';
 /////////////////////////////////////////////////////////////////////////////
 
-class Init {
+export default class BallModel {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.r = 16.25;
@@ -152,8 +152,4 @@ class Init {
 			return true;
 		})
 	};
-};
-
-module.exports = {
-	Init: Init
 };

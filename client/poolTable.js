@@ -2,7 +2,7 @@
 const d3 = require('d3');
 const Victor = require('victor');
 /////////////////////////////////////////////////////////////////////////////
-class Init {
+export default class PoolTable {
 	constructor(container) {
 		//STYLING
 		this.innerStyle = {
@@ -62,8 +62,4 @@ class Init {
 	getModel() {
 		return this.model;
 	}
-}
-
-module.exports = {
-	Init: Init
 }

@@ -1,6 +1,6 @@
-var Victor = require('victor');
+import * as Victor from 'victor';
 
-class forceSimulation {
+export default class ForceSimulation {
 	constructor() {
 		this.nodes = null;
 		this.events = {};
@@ -216,8 +216,4 @@ class forceSimulation {
 		}
 		return false;
 	}
-}
-
-module.exports = {
-	forceSimulation: forceSimulation
 }

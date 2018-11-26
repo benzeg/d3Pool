@@ -1,11 +1,11 @@
 /*Dependencies*/
-const TableModel = require('./poolTable.js');
-const PocketModel = require('./poolPocket.js');
-const PowerModel = require('./powerGrid.js');
-const BallModel = require('./poolBall.js');
-const ControlModel = require('./gameController.js');
+import TableModel from './poolTable';
+import PocketModel from './poolPocket';
+import PowerModel from './powerGrid';
+import BallModel from './poolBall';
+import controller from './gameController';
 /////////////////////////////////////////////////////////////////////////////
-class Init {
+export default class Setup {
 	constructor(HTMLcontainer) {
 		//html container
 		this.Container = HTMLcontainer;
@@ -27,26 +27,22 @@ class Init {
 	*/
 	newGame() {
 		//game table contains an svg:svg element inserted into a div container
-		this.Table = new TableModel.Init(this.Container);
+		this.Table = new TableModel(this.Container);
 		this.Table.setUp();
 
 		//game pocket contains a selection of svg:circle elements inserted into game table svg container
-		this.Pocket = new PocketModel.Init(this.Table.getModel());
+		this.Pocket = new PocketModel(this.Table.getModel());
 		this.Pocket.setUp();
 
 		///power grid contains two svg:rect elements inserted into game table svg container
-		this.PowerGrid = new PowerModel.Init(this.Table.getModel());
+		this.PowerGrid = new PowerModel(this.Table.getModel());
 		this.PowerGrid.setUp();
 
 		//ball contains a selection of svg:circle elements inserted into game table svg container 
-		this.Ball = new BallModel.Init(this.Table.getModel());
+		this.Ball = new BallModel(this.Table.getModel());
 		this.Ball.setUp();
 	
 		//game control assigns game logic to game objects
-		ControlModel.setUp(this.Table, this.PowerGrid, this.Ball)
+		controller(this.Table, this.PowerGrid, this.Ball);
 	}
 }	
-
-module.exports = {
-	Init: Init
-}

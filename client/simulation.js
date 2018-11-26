@@ -1,9 +1,9 @@
 /*Dependencies*/
-const Victor = require('victor');
-const ForceSimulation = require('./forceSimulation.js').forceSimulation;
+import * as Victor from 'victor';
+import ForceSimulation from './forceSimulation';
 ////////////////////////////////////////////////////////////////
 //** todo refactor to class
-const Init = (activeNodes, cueForce, tickEvent, catchEvent) => {
+export default function Simulate(activeNodes, cueForce, tickEvent, catchEvent) {
 	const cb = () => {
 		simulation.resume();
 	}
@@ -14,8 +14,4 @@ const Init = (activeNodes, cueForce, tickEvent, catchEvent) => {
 						.on('catch', (id) => { catchEvent(id); });
 
 	simulation.applyForce(cueForce);
-}
-
-module.exports = {
-	Init: Init
 }

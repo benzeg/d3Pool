@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////
-var Setup = require('./poolSetup.js');
+import Setup from './poolSetup';
 /////////////////////////////////////////////////////////////
-var Pool = new Setup.Init('#container');
+var Pool = new Setup('#container');
 Pool.newGame();

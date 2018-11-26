@@ -2,7 +2,7 @@
 const Victor = require('victor'); //vector library
 
 /*CODE*/
-class Init {
+export default class PowerGrid {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.gridStyle = {
@@ -81,8 +81,4 @@ class Init {
 		this.magnitudeLevel.attr('height', this.currentMagnitude);
 		return this.currentMagnitude;
 	}
-}
-
-module.exports = {
-	Init: Init
 }
