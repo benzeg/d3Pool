@@ -1,5 +1,5 @@
 {
-  "name": "learnd3",
+  "name": "pool-2d",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benzeg/learnD3.git"
+    "url": "git+https://github.com/benzeg/pool-2d.git"
   },
   "author": "Benze Gong",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/benzeg/learnD3/issues"
+    "url": "https://github.com/benzeg/pool-2d/issues"
   },
-  "homepage": "https://github.com/benzeg/learnD3#readme",
+  "homepage": "https://github.com/benzeg/pool-2d#readme",
   "dependencies": {
     "d3": "^4.8.0",
     "victor": "^1.1.0"
