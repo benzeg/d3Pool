@@ -75,13 +75,13 @@ export default class PowerGrid {
 	increaseMagnitude = () => {
 		if(this.moving) {
 			if (this.currentMagnitude === this.maxMagnitude) {
-				this.resetMagnitude();
 				return 'Error: At maximum magnitude';
+			} else {
+				//only increment while less than max magnitude
+				this.currentMagnitude+=2; //update cache
+				this.magnitudeLevel.attr('height', this.currentMagnitude);
+				this.frameId = window.requestAnimationFrame(this.increaseMagnitude);
 			}
-			//only increment while less than max magnitude
-			this.currentMagnitude+=2; //update cache
-			this.magnitudeLevel.attr('height', this.currentMagnitude);
-			this.frameId = window.requestAnimationFrame(this.increaseMagnitude);
 		}
 	}
 
