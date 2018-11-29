@@ -30,6 +30,8 @@ export default class PowerGrid {
 		//CACHE
 		this.maxVelocity = 300; //preset max velocity of 300px/sec
 		this.currentMagnitude = 0;
+
+		this.moving = false;
 	}
 
 	/*
@@ -65,18 +67,30 @@ export default class PowerGrid {
 		return (this.currentMagnitude / this.maxMagnitude) * this.maxVelocity;
 	}
 
+	startAnimation = () => {
+		this.moving = true;
+	}
+
 	//increases magnitude
-	increaseMagnitude() {
-		if (this.currentMagnitude === this.maxMagnitude) {
-			return 'Error: At maximum magnitude';
+	increaseMagnitude = () => {
+		if(this.moving) {
+			if (this.currentMagnitude === this.maxMagnitude) {
+				this.resetMagnitude();
+				return 'Error: At maximum magnitude';
+			}
+			//only increment while less than max magnitude
+			this.currentMagnitude+=2; //update cache
+			this.magnitudeLevel.attr('height', this.currentMagnitude);
+			this.frameId = window.requestAnimationFrame(this.increaseMagnitude);
 		}
-		//only increment while less than max magnitude
-		this.currentMagnitude++; //update cache
-		this.magnitudeLevel.attr('height', this.currentMagnitude);
 	}
 
 	//resets magnitude
-	resetMagnitude() {
+	resetMagnitude = () => {
+		this.moving = false;
+		if(this.frameId) {
+			window.cancelAnimationFrame(this.frameId);
+		}
 		this.currentMagnitude = 0;
 		this.magnitudeLevel.attr('height', this.currentMagnitude);
 		return this.currentMagnitude;

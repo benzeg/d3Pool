@@ -12,9 +12,8 @@ export default function controller(Table, PowerGrid, Ball) {
 	*/
 	let powerUp;
 	const mouseHold = () => {
-		powerUp = window.setInterval(() => {
-			PowerGrid.increaseMagnitude();
-		}, 10);
+		PowerGrid.startAnimation();
+		PowerGrid.increaseMagnitude();
 	}
 
 	/*
@@ -22,7 +21,6 @@ export default function controller(Table, PowerGrid, Ball) {
 	Calls on a chain of position calculation and update events to update svg positions
 	*/
 	const mouseRelease = () => {
-		console.log('hello')
 		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
 			.getCueBallPosition()
@@ -31,7 +29,6 @@ export default function controller(Table, PowerGrid, Ball) {
 
 		let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
 		//clear power up interval and reset magnitude
-		window.clearInterval(powerUp);
 		PowerGrid.resetMagnitude();
 		/*
 		Initiate 2D elastic collision simulation with nodes, force, and callback function to act
