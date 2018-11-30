@@ -3,7 +3,7 @@ import * as Victor from 'victor';
 import ForceSimulation from './forceSimulation';
 ////////////////////////////////////////////////////////////////
 //** todo refactor to class
-export default function Simulate(activeNodes, cueForce, tickEvent, catchEvent) {
+export default function Simulate(activeNodes, cueForce, tickEvent, catchEvent, cueResume) {
 	const cb = () => {
 		simulation.resume();
 	}
@@ -13,5 +13,5 @@ export default function Simulate(activeNodes, cueForce, tickEvent, catchEvent) {
 						.on('tick', () => { tickEvent(cb); })
 						.on('catch', (id) => { catchEvent(id); });
 
-	simulation.applyForce(cueForce);
+	simulation.applyForce(cueForce, cueResume);
 }

@@ -50,8 +50,7 @@ export default class PoolTable {
 	setEvent(event, cb) {
 		//temporary fix
 		this.model.on(event[0], cb[0])
-							.on(event[1], cb[1]);
-		console.log('table set event', this.model)
+							.on(event[1], cb[1]).on(event[2], cb[2]);
 		return this.model;
 	}
 

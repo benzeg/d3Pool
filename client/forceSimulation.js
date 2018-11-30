@@ -7,7 +7,7 @@ export default class ForceSimulation {
 		this.timeVec = new Victor(0.1, 0.1);
 		this.friction = new Victor(1, 1);
 		this.forceVec = {};
-		this.run = true;
+		this.run = false;
 	}
 
 	on(event, cb) {
@@ -34,12 +34,16 @@ export default class ForceSimulation {
 		return this;
 	}
 
-	applyForce(forceVec) {
+	applyForce(forceVec, cueResume) {
 		this.forceVec.cueBall = forceVec;
+		if(!this.run){
+			this.run = true;
+		};
 		this.move = setInterval(() => {
 			if(this.run) {
 				if (!this.checkForceVec()) {
 					clearInterval(this.move);
+					cueResume();
 				} else {
 					this.pause();
 					//apply force vector to node position
@@ -92,8 +96,6 @@ export default class ForceSimulation {
 	}
 
 	b2bCollision(currIndex, cb) {
-		console.log('currIndex', currIndex)
-		console.log('length', this.nodes.length)
 		if (this.moved[currIndex] === 1) {
 			var r1 = this.nodes[currIndex].r;
 			var cx1 = this.nodes[currIndex].cx;
@@ -139,7 +141,6 @@ export default class ForceSimulation {
 
 					//
 					if (currIndex === this.nodes.length -1) {
-						console.log('returned')
 						return cb();
 					}
 				}

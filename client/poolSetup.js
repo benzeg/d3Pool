@@ -3,6 +3,8 @@ import TableModel from './poolTable';
 import PocketModel from './poolPocket';
 import PowerModel from './powerGrid';
 import BallModel from './poolBall';
+import CueModel from './poolCue';
+
 import controller from './gameController';
 /////////////////////////////////////////////////////////////////////////////
 export default class Setup {
@@ -14,6 +16,7 @@ export default class Setup {
 		this.Table = null;
 		this.Pocket = null;
 		this.PoolBalls = null;
+		this.cue = null;
 	}
 
 	/*
@@ -41,8 +44,12 @@ export default class Setup {
 		//ball contains a selection of svg:circle elements inserted into game table svg container 
 		this.Ball = new BallModel(this.Table.getModel());
 		this.Ball.setUp();
+		
+		//cue
+		this.Cue = new CueModel(this.Table.getModel());
+		this.Cue.setUp();
 	
 		//game control assigns game logic to game objects
-		controller(this.Table, this.PowerGrid, this.Ball);
+		controller(this.Table, this.PowerGrid, this.Ball, this.Cue);
 	}
 }	
