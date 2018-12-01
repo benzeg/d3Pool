@@ -10,31 +10,31 @@ export default class ForceSimulation {
 		this.run = false;
 	}
 
-	on(event, cb) {
+	on = (event, cb) => {
 		this.events[event] = cb;
 		return this;
 	}
 
-	emit(event, param) {
+	emit=(event, param) => {
 		if (this.events[event]) {
 			this.events[event](param);
 		}
 	}
 
-	resume() {
+	resume=() =>{
 		this.run = true;
 	}
 
-	pause() {
+	pause=() =>{
 		this.run = false;
 	}
 
-	addNodes(activeNodes) {
+	addNodes=(activeNodes) =>{
 		this.nodes = activeNodes;
 		return this;
 	}
 
-	applyForce(forceVec, cueResume) {
+	applyForce=(forceVec, cueResume)=> {
 		this.forceVec.cueBall = forceVec;
 		if(!this.run){
 			this.run = true;
@@ -87,7 +87,7 @@ export default class ForceSimulation {
 	Only nodes with an active velocity has a vector in the velocity object
 	*/
 
-	checkCollisions(cb) {
+	checkCollisions=(cb) =>{
 		var index = 0;
 		while (index < this.nodes.length) {
 			this.b2bCollision(index, () => {this.b2wCollision(cb)});
@@ -95,7 +95,7 @@ export default class ForceSimulation {
 		}
 	}
 
-	b2bCollision(currIndex, cb) {
+	b2bCollision=(currIndex, cb) =>{
 		if (this.moved[currIndex] === 1) {
 			var r1 = this.nodes[currIndex].r;
 			var cx1 = this.nodes[currIndex].cx;
@@ -151,7 +151,7 @@ export default class ForceSimulation {
 		return;
 	}
 
-	b2wCollision(cb) {
+	b2wCollision=(cb) =>{
 		//if ball touches bound
 		//i) reflect axis that touches bound
 		//ii) decrease returned force by 30% to account for wall absorption
@@ -209,7 +209,7 @@ export default class ForceSimulation {
 		return cb();
 	}
 
-	checkForceVec() {
+	checkForceVec=() =>{
 		for (var key in this.forceVec) {
 			if (this.forceVec[key] !== undefined) {
 				return true;

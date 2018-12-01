@@ -31,8 +31,8 @@ export default class PoolTable {
 	Generates an outer container representing the entire pool table with
 	smaller container inside representing the play area.
 	*/
-	setUp() {
-		this.model = d3.select(container).append('svg:svg')
+	setUp = () => {
+		this.model = d3.select(this.container).append('svg:svg')
 			.attr('height', this.outerStyle.height)
 			.attr('width', this.outerStyle.width)
 			.style('background-color', this.outerStyle.color);
@@ -47,18 +47,18 @@ export default class PoolTable {
 		return this.model;
 	}
 
-	setEvent(event, cb) {
+	setEvent = (event, cb) => {
 		//temporary fix
 		this.model.on(event[0], cb[0])
 							.on(event[1], cb[1]).on(event[2], cb[2]);
 		return this.model;
 	}
 
-	getMouseCoordinates() {
+	getMouseCoordinates = () => {
 		return new Victor.fromArray(d3.mouse(this.model._groups[0][0]));
 	}
 
-	getModel() {
+	getModel = () => {
 		return this.model;
 	}
 }

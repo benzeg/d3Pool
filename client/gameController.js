@@ -61,13 +61,6 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		let activeNodes = Ball.getActiveNodes();
 		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
 			Cue.resume()
-			// Cue.attachBall(Ball.getCueBallPosition());
-			// const mousePosition = Table.getMouseCoordinates();
-			// const cueAngle = Ball
-			// 	.getCueBallPosition()
-			// 	.subtract(Table.getMouseCoordinates())
-			// 	.normalize().angleDeg();
-			// Cue.updateRotation(cueAngle);
 		});
 	}
 
