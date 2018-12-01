@@ -12,7 +12,7 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 	*/
 
 	const mouseMove = () => {
-		if(Cue.move) {
+		if(Cue.rotate) {
 			const cueBallPosition = Ball.getCueBallPosition();
 			Cue.attachBall(cueBallPosition);
 			const mousePosition = Table.getMouseCoordinates();
@@ -27,11 +27,13 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 	Event to trigger when mouse is held down to charge cue power
 	Increase power grid level at a set interval
 	*/
-	let powerUp;
+	let powerUp;	
 	const mouseHold = () => {
 		Cue.pause();
 		PowerGrid.startAnimation();
 		PowerGrid.increaseMagnitude();
+		Cue.startAnimation();
+		Cue.increaseMagnitude();
 	}
 
 	/*
@@ -48,6 +50,8 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
 		//clear power up interval and reset magnitude
 		PowerGrid.resetMagnitude();
+		Cue.resetMagnitude();
+		Cue.stopAnimation();
 		/*
 		Initiate 2D elastic collision simulation with nodes, force, and callback function to act
 		on each tick of simulation event
@@ -56,8 +60,15 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		//**todo refactor Simulation to class
 		let activeNodes = Ball.getActiveNodes();
 		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
-			Cue.attachBall(Ball.getCueBallPosition());
-			Cue.resume()});
+			Cue.resume()
+			// Cue.attachBall(Ball.getCueBallPosition());
+			// const mousePosition = Table.getMouseCoordinates();
+			// const cueAngle = Ball
+			// 	.getCueBallPosition()
+			// 	.subtract(Table.getMouseCoordinates())
+			// 	.normalize().angleDeg();
+			// Cue.updateRotation(cueAngle);
+		});
 	}
 
 	/*
