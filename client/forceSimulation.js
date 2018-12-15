@@ -115,13 +115,36 @@ export default class ForceSimulation {
 						collide = true;
 						//calculate force direction vector based on ball A and ball B center points
 						var newCoord = [cx2 - cx1, cy2 - cy1];
-						var newVec = new Victor.fromArray(newCoord);
-						newVec.normalize();
+						var newVec = new Victor.fromArray( newCoord ).normalize();
+
+						const ballAClone = this.forceVec[ballA].clone().normalize();
+						const dotAB = ballAClone.dot( newVec );
+
+						const ballB_magnitude = dotAB * this.forceVec[ballA].length();
+						const ballB_y = dotAB * ballB_magnitude;
+						const ballB_x = Math.sin( Math.acos( dotAB ) ) & ballB_magnitude;
+
+						console.log(ballB_x, ballB_y);
+						
 						//translate current force vector magnitude to new force vector
 							//hacky right now and just multiplies both x and y vectors by magnitude
 						var magnitude = this.forceVec[ballA].length();
 						newVec.x *= magnitude;
 						newVec.y *= magnitude;
+
+						/*
+							new feature
+
+
+						*/
+
+
+						/*
+
+							end new feature
+
+						*/
+
 						//add vectors if ball B is already in motion, otherwise set ball B force vector to new force vector
 						if (this.forceVec[ballB] !== undefined) {
 							this.forceVec[ballB].add(newVec);
