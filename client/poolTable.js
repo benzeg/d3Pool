@@ -25,6 +25,7 @@ export default class PoolTable {
 		//MODEL
 		this.model = null;
 		this.playArea = null;
+		this.coordinates;
 	}
 
 	/*
@@ -33,6 +34,7 @@ export default class PoolTable {
 	*/
 	setUp = () => {
 		this.model = d3.select(this.container).append('svg:svg')
+			.attr('id', 'table')
 			.attr('height', this.outerStyle.height)
 			.attr('width', this.outerStyle.width)
 			.style('background-color', this.outerStyle.color);
@@ -43,19 +45,20 @@ export default class PoolTable {
 			.attr('x', this.innerStyle.x)
 			.attr('y', this.innerStyle.y)
 			.style('fill', this.innerStyle.color);
-
-		return this.model;
 	}
 
 	setEvent = (event, cb) => {
-		//temporary fix
 		this.model.on(event[0], cb[0])
-							.on(event[1], cb[1]).on(event[2], cb[2]);
-		return this.model;
+			.on(event[1], cb[1])
+			.on(event[2], cb[2]);
 	}
 
 	getMouseCoordinates = () => {
-		return new Victor.fromArray(d3.mouse(this.model._groups[0][0]));
+		return new Victor.fromArray(this.coordinates);
+	}
+
+	updateMousePosition = ( coordinates ) => {
+		this.coordinates = coordinates;
 	}
 
 	getModel = () => {
