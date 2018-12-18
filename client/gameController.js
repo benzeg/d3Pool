@@ -2,6 +2,7 @@
 import * as Victor from 'victor';
 import vecUtil from './vectorUtil/vectorLib';
 import simulate from './simulation';
+import * as d3 from 'd3';
 /////////////////////////////////////////////////////////////////////////////
 
 export default function controller(Table, PowerGrid, Ball, Cue) {
@@ -11,7 +12,8 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		Calls on a chain of position calculation and update events to update cue position.
 	*/
 
-	const mouseMove = () => {
+	const mouseMove = function() {
+		Table.updateMousePosition(d3.mouse(this));
 		if(Cue.rotate) {
 			const cueBallPosition = Ball.getCueBallPosition();
 			Cue.attachBall(cueBallPosition);
@@ -27,19 +29,21 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 	Increase power grid level at a set interval
 	*/
 	const mouseHold = () => {
-		Cue.pause();
 		Cue.setMousePosition(Table.getMouseCoordinates());
-		PowerGrid.startAnimation();
-		PowerGrid.increaseMagnitude();
 		Cue.startAnimation();
 		Cue.increaseMagnitude();
+		PowerGrid.startAnimation();
+		PowerGrid.increaseMagnitude();
 	}
 
 	/*
 	Event to trigger when mouse is released following a charge
 	Calls on a chain of position calculation and update events to update svg positions
 	*/
-	const mouseRelease = () => {
+	const mouseRelease = function(event) {
+		Cue.pause();
+		PowerGrid.pause();
+
 		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
 			.getCueBallPosition()
@@ -57,10 +61,18 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		Each tick event triggers a call to Ball svgs' positions on screen
 		*/
 		//**todo refactor Simulation to class
+	
 		let activeNodes = Ball.getActiveNodes();
 		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
-			Cue.resume();
-			console.log('hello')
+				Cue.resume();
+				PowerGrid.resume();
+				const cueBallPosition = Ball.getCueBallPosition();
+				Cue.attachBall(cueBallPosition);
+				const cueAngle = Ball
+					.getCueBallPosition()
+					.subtract(Table.getMouseCoordinates())
+					.normalize().angleDeg();
+				Cue.updateRotation(cueAngle);
 		});
 	}
 
