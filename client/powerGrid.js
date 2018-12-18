@@ -32,6 +32,7 @@ export default class PowerGrid {
 		this.currentMagnitude = 0;
 
 		this.moving = false;
+		this.run = true;
 	}
 
 	/*
@@ -68,7 +69,11 @@ export default class PowerGrid {
 	}
 
 	startAnimation = () => {
-		this.moving = true;
+		if(this.run) {
+			if(!this.moving) {
+				this.moving = true;
+			}
+		}
 	}
 
 	//increases magnitude
@@ -94,5 +99,13 @@ export default class PowerGrid {
 		this.currentMagnitude = 0;
 		this.magnitudeLevel.attr('height', this.currentMagnitude);
 		return this.currentMagnitude;
+	}
+
+	pause =() => {
+		this.run = false;
+	}
+
+	resume = () => {
+		this.run = true;
 	}
 }
