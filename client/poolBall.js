@@ -5,43 +5,49 @@ import * as Victor from 'victor';
 export default class BallModel {
 	constructor(SVGcontainer) {
 		//STYLING
-		this.r = 16.25;
 		this.activeBall = [
 			{'cx': 320,
 			 'cy': 320,
 			 'fill': "#ffffff",
 			 'id': "cueBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 			{'cx': 880,
 			 'cy': 320,
 			 'fill': '#ffcc00',
 			 'id': "yellowBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 			{'cx': 908.14,
 			 'cy': 303.75,
 			 'fill': '#c61313',
 			 'id': "redBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 			{'cx': 908.14,
 		   'cy': 336.25,
 		 	 'fill': '#0c00ff',
 			 'id': "blueBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 		 	{'cx': 936.28,
 		 	 'cy': 287.50,
 		 	 'fill': '#ff7a08',
 			 'id': "orangeBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 		 	{'cx': 936.28,
 		   'cy': 320,
 		   'fill': '#6308a9',
 			 'id': "purpleBall",
-			 'class': "activeBall"},
+			 'class': "activeBall",
+			 'r': 16.25},
 		  {'cx': 936.28,
 		   'cy': 352.50,
 		 	 'fill': '#035b3b',
 			 'id': "greenBall",
-			 'class': "activeBall"}
+			 'class': "activeBall",
+			 'r': 16.25}
 		];
 
 		//SVG container
@@ -66,7 +72,7 @@ export default class BallModel {
 			.append('svg:circle');
 
 		this.activeModel
-			.attr('r', this.r)
+			.attr('r', (d)=> d.r)
 			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
 			.attr('cy', (d) => d.cy)
@@ -97,7 +103,7 @@ export default class BallModel {
 
 		//update active node positions
 		this.activeModel
-			.attr('r', this.r)
+			.attr('r', (d)=> d.r)
 			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
 			.attr('cy', (d) => d.cy)
@@ -111,7 +117,7 @@ export default class BallModel {
 			.append('svg:circle')
 
 		this.inactiveModel
-			.attr('r', this.r)
+			.attr('r', (d)=> d.r)
 			.attr('class', (d) => d.class)
 			.attr('cx', (d) => d.cx)
 			.attr('cy', (d) => d.cy)

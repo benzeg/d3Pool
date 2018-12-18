@@ -15,7 +15,6 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		if(Cue.rotate) {
 			const cueBallPosition = Ball.getCueBallPosition();
 			Cue.attachBall(cueBallPosition);
-			const mousePosition = Table.getMouseCoordinates();
 			const cueAngle = Ball
 				.getCueBallPosition()
 				.subtract(Table.getMouseCoordinates())
@@ -27,9 +26,9 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 	Event to trigger when mouse is held down to charge cue power
 	Increase power grid level at a set interval
 	*/
-	let powerUp;	
 	const mouseHold = () => {
 		Cue.pause();
+		Cue.setMousePosition(Table.getMouseCoordinates());
 		PowerGrid.startAnimation();
 		PowerGrid.increaseMagnitude();
 		Cue.startAnimation();
@@ -44,7 +43,7 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		//calculate initial force to be exerted on cue ball
 		let cueDirection = Ball
 			.getCueBallPosition()
-			.subtract(Table.getMouseCoordinates())
+			.subtract(Cue.mousePosition)
 			.normalize();
 
 		let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
@@ -60,7 +59,8 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		//**todo refactor Simulation to class
 		let activeNodes = Ball.getActiveNodes();
 		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
-			Cue.resume()
+			Cue.resume();
+			console.log('hello')
 		});
 	}
 

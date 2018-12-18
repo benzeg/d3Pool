@@ -72,7 +72,7 @@ function getDirection(r){
         return [-1, -1]; 
     } else {
         if(theta === 0 || quadrant[3] - theta === 0){
-            return [0, 0];
+            return [1, 0];
         }
         return [1, -1];
     }

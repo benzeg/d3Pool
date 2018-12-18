@@ -18,6 +18,7 @@ export default class CueModel {
         this.rotate = true;
         this.maxMagnitude = 240;
         this.currentMagnitude = 0;
+        this.mousePosition;
     }
 
     setUp() {
@@ -36,6 +37,10 @@ export default class CueModel {
         if(this.rotate) {
             this.model.attr("transform", `rotate(${deg}, ${this.cueBallPosition.x}, ${this.cueBallPosition.y})`);
         }
+    }
+
+    setMousePosition = (coordinates) => {
+        this.mousePosition = coordinates;
     }
 
     startAnimation = () => {

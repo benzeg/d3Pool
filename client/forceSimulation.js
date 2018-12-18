@@ -110,7 +110,7 @@ export default class ForceSimulation {
 					var cy2 = this.nodes[index].cy;
 					var distance = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
 					var ballB = this.nodes[index].id;
-					if ((32.5) >= distance) {
+					if ((r1*2) >= distance) {
 						//perfect elastic collision
 						collide = true;
 						//calculate force direction vector based on ball A and ball B center points
@@ -120,30 +120,11 @@ export default class ForceSimulation {
 						const ballAClone = this.forceVec[ballA].clone().normalize();
 						const dotAB = ballAClone.dot( newVec );
 
-						const ballB_magnitude = dotAB * this.forceVec[ballA].length();
-						const ballB_y = dotAB * ballB_magnitude;
-						const ballB_x = Math.sin( Math.acos( dotAB ) ) & ballB_magnitude;
-
-						console.log(ballB_x, ballB_y);
-						
-						//translate current force vector magnitude to new force vector
+							//translate current force vector magnitude to new force vector
 							//hacky right now and just multiplies both x and y vectors by magnitude
 						var magnitude = this.forceVec[ballA].length();
 						newVec.x *= magnitude;
 						newVec.y *= magnitude;
-
-						/*
-							new feature
-
-
-						*/
-
-
-						/*
-
-							end new feature
-
-						*/
 
 						//add vectors if ball B is already in motion, otherwise set ball B force vector to new force vector
 						if (this.forceVec[ballB] !== undefined) {
