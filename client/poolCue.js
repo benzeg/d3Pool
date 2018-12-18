@@ -19,6 +19,7 @@ export default class CueModel {
         this.maxMagnitude = 240;
         this.currentMagnitude = 0;
         this.mousePosition;
+        this.run = true;
     }
 
     setUp() {
@@ -44,8 +45,11 @@ export default class CueModel {
     }
 
     startAnimation = () => {
-        if(!this.move) {
-            this.move = true;
+        if(this.run) {
+            this.rotate = false;
+            if(!this.move) {
+                this.move = true;
+            }
         }
     }
 
@@ -86,11 +90,12 @@ export default class CueModel {
     }
 
     pause = () => {
-        this.rotate = false;
+        this.run = false;
     }
 
     resume = () => {
         this.rotate = true;
+        this.run = true;
     }
 
 }
