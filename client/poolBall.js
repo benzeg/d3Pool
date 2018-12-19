@@ -6,12 +6,6 @@ export default class BallModel {
 	constructor(SVGcontainer) {
 		//STYLING
 		this.activeBall = [
-			{'cx': 320,
-			 'cy': 320,
-			 'fill': "#ffffff",
-			 'id': "cueBall",
-			 'class': "activeBall",
-			 'r': 16.25},
 			{'cx': 880,
 			 'cy': 320,
 			 'fill': '#ffcc00',
@@ -37,15 +31,21 @@ export default class BallModel {
 			 'class': "activeBall",
 			 'r': 16.25},
 		 	{'cx': 936.28,
-		   'cy': 320,
-		   'fill': '#6308a9',
+		  	 'cy': 320,
+		  	 'fill': '#6308a9',
 			 'id': "purpleBall",
 			 'class': "activeBall",
 			 'r': 16.25},
-		  {'cx': 936.28,
-		   'cy': 352.50,
+		  	{'cx': 936.28,
+		  	 'cy': 352.50,
 		 	 'fill': '#035b3b',
 			 'id': "greenBall",
+			 'class': "activeBall",
+			 'r': 16.25},
+		  	{'cx': 320,
+			 'cy': 320,
+			 'fill': "#ffffff",
+			 'id': "cueBall",
 			 'class': "activeBall",
 			 'r': 16.25}
 		];
@@ -57,9 +57,8 @@ export default class BallModel {
 		this.activeModel = null; //balls that are currently in play
 		this.inactiveModel = null; //balls removed from play (pocketed)
 
-		//CACHE
-		this.inactiveNum = 0;
 		this.inactiveBall = [];
+		this.findCue = null;
 	};
 
 	/*
@@ -88,6 +87,14 @@ export default class BallModel {
 	updateModels then binds this updated data to redraw each selection.
 	*/
 	updateModels(cb) {
+		//put cue back in play at start position if it got put in inactive
+		if( this.findCue !== null ) {
+			const cueBall = this.inactiveBall.splice( this.findCue, 1 ).pop();
+			cueBall.class = 'activeBall';
+			cueBall.cx = 320, cueBall.cy = 320;
+			this.activeBall.push( cueBall );	
+			this.findCue = null;
+		}	
 		//update active model
 		//bind model with active nodes
 		this.activeModel = this.Container.selectAll('.activeBall')
@@ -135,27 +142,26 @@ export default class BallModel {
 	//***************************************//
 	//Single ball functions
 
-	//cue ball node is always set to index 0 in active style list, returns vector position
+	//cue ball node is always found at the end of the activeBall style list, returns vector position
 	getCueBallPosition() {
-		return new Victor.fromArray([this.activeBall[0].cx, this.activeBall[0].cy]);
+		return new Victor.fromArray([this.activeBall[this.activeBall.length - 1].cx, this.activeBall[this.activeBall.length - 1].cy]);
 	};
 
 	/*
-	Node to be removed from play is identified by its unique id.
-	Ball status is defined by its class, therefore changing its class attributes toggles
-	in play vs not
+		Node to be removed from play is identified by its unique id.
 	*/
 	updateNode(id) {
 		return this.activeBall = this.activeBall.filter((d) => {
 			if (d.id === id) {
 				d.class = 'inactiveBall';
-				d.cx = 80 + 40*this.inactiveNum;
+				d.cx = 80 + 40*this.inactiveBall.length;
 				d.cy = 20;
-				this.inactiveNum++;
 				this.inactiveBall.push(d);
+				//mark location if cueBall gets put out of play, to be placed back in play during updateModels
+				if(id === 'cueBall') { this.findCue = this.inactiveBall.length - 1 };
 				return false;
 			}
 			return true;
-		})
+		});
 	};
 };
