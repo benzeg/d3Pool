@@ -15,7 +15,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/?utm_source=a2hs",
+  "start_url": "./?utm_source=a2hs",
   "background_color": "#252525",
   "display": "minimal-ui",
   "orientation": "landscape",
