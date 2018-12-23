@@ -11,7 +11,8 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 		event.preventDefault();
 
 		switch(event.type) {
-			case "mousemove" || "touchmove":
+			case "mousemove":
+			case "touchmove":
 				/*
 				   Event to trigger when mouse is moved around the game table.
 				   Calls on a chain of position calculation and update events to update cue position.
@@ -29,8 +30,9 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 
 				}
 				break;
-
-			case "mousedown" || "touchstart":
+			
+			case "mousedown":
+			case "touchstart":
 				/*
 				   Event to trigger when mouse is held down to charge cue power
 				   Increase power grid level at a set interval
@@ -44,7 +46,8 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 				PowerGrid.increaseMagnitude();
 				break;
 
-			case "mouseup" || "touchend" :
+			case "mouseup":
+			case "touchend":
 				/*
 				   Event to trigger when mouse is released following a charge
 				   Calls on a chain of position calculation and update events to update svg positions
