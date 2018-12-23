@@ -62,10 +62,10 @@ export default class PoolTable {
 			.style('fill', this.innerStyle.color);
 	}
 
-	setEvent = (event, cb) => {
-		this.model.on(event[0], cb[0])
-			.on(event[1], cb[1])
-			.on(event[2], cb[2]);
+	setEvent = (events, cb) => {
+		for(let e of events) {
+			this.model.on(e, cb);
+		}	
 	}
 
 	getMouseCoordinates = () => {
