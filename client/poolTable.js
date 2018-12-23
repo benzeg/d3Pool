@@ -3,7 +3,7 @@ const d3 = require('d3');
 const Victor = require('victor');
 /////////////////////////////////////////////////////////////////////////////
 export default class PoolTable {
-	constructor(container) {
+	constructor(wrapper) {
 		//STYLING
 		this.innerStyle = {
 			x: 40,
@@ -19,9 +19,16 @@ export default class PoolTable {
 			color: '#8a3232'
 		};
 
-		//html container
-		this.container = container;
-
+		//view wrapper
+		this.Wrapper = d3.select( wrapper )
+				.style("position", "absolute")
+				.style("height", "100vh")
+				.style("width", "100vw")
+				.style("top", "0")
+				.style("left", "0")
+				.style("display", "flex")
+				.style("justify-content", "center")
+				.style("align-items", "center");
 		//MODEL
 		this.model = null;
 		this.playArea = null;
@@ -33,10 +40,16 @@ export default class PoolTable {
 	smaller container inside representing the play area.
 	*/
 	setUp = () => {
-		this.model = d3.select(this.container).append('svg:svg')
+		const container = this.Wrapper.append('div')
+			.style("padding", "10px")
+			.style("width", "100%")
+			.style("max-width", "1200px")
+			.style("max-height", "640px")
+			.style("box-sizing", "border-box");
+
+		this.model = container.append('svg:svg')
 			.attr('id', 'table')
 			.attr('viewBox', `0 0 ${this.outerStyle.width} ${this.outerStyle.height}`)
-			.attr('preserveAspectRatio', 'xMidYMid')
 			.attr('height', '100%')
 			.attr('width', '100%')
 			.style('background-color', this.outerStyle.color);
