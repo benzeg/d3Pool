@@ -35,8 +35,10 @@ export default class PoolTable {
 	setUp = () => {
 		this.model = d3.select(this.container).append('svg:svg')
 			.attr('id', 'table')
-			.attr('height', this.outerStyle.height)
-			.attr('width', this.outerStyle.width)
+			.attr('viewBox', `0 0 ${this.outerStyle.width} ${this.outerStyle.height}`)
+			.attr('preserveAspectRatio', 'xMidYMid')
+			.attr('height', '100%')
+			.attr('width', '100%')
 			.style('background-color', this.outerStyle.color);
 
 		this.playArea = this.model.append('svg:rect')

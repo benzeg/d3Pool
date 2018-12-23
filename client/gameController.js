@@ -28,52 +28,57 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 	Event to trigger when mouse is held down to charge cue power
 	Increase power grid level at a set interval
 	*/
-	const mouseHold = () => {
-		Cue.setMousePosition(Table.getMouseCoordinates());
-		Cue.startAnimation();
-		Cue.increaseMagnitude();
-		PowerGrid.startAnimation();
-		PowerGrid.increaseMagnitude();
+	const mouseHold = function() {
+		if(event.which === 1) { //[1, 2, 3] = [left button, middle button, right button]
+			Cue.setMousePosition(Table.getMouseCoordinates());
+			Cue.startAnimation();
+			Cue.increaseMagnitude();
+			PowerGrid.startAnimation();
+			PowerGrid.increaseMagnitude();
+		}
 	}
 
 	/*
 	Event to trigger when mouse is released following a charge
 	Calls on a chain of position calculation and update events to update svg positions
 	*/
-	const mouseRelease = function(event) {
-		Cue.pause();
-		PowerGrid.pause();
+	const mouseRelease = function() {
+		if(event.which === 1) {
+			Cue.pause();
+			PowerGrid.pause();
 
-		//calculate initial force to be exerted on cue ball
-		let cueDirection = Ball
-			.getCueBallPosition()
-			.subtract(Cue.mousePosition)
-			.normalize();
+			//calculate initial force to be exerted on cue ball
+			let cueDirection = Ball
+				.getCueBallPosition()
+				.subtract(Cue.mousePosition)
+				.normalize();
 
-		let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
-		//clear power up interval and reset magnitude
-		PowerGrid.resetMagnitude();
-		Cue.resetMagnitude();
-		Cue.stopAnimation();
-		/*
-		Initiate 2D elastic collision simulation with nodes, force, and callback function to act
-		on each tick of simulation event
-		Each tick event triggers a call to Ball svgs' positions on screen
-		*/
-		//**todo refactor Simulation to class
-	
-		let activeNodes = Ball.getActiveNodes();
-		simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
-				Cue.resume();
-				PowerGrid.resume();
-				const cueBallPosition = Ball.getCueBallPosition();
-				Cue.attachBall(cueBallPosition);
-				const cueAngle = Ball
+			let cueForce = vecUtil(PowerGrid.getMagnitude(), cueDirection);
+			//clear power up interval and reset magnitude
+			PowerGrid.resetMagnitude();
+			Cue.resetMagnitude();
+			Cue.stopAnimation();
+			/*
+			   Initiate 2D elastic collision simulation with nodes, force, and callback function to act
+			   on each tick of simulation event
+			   Each tick event triggers a call to Ball svgs' positions on screen
+			 */
+			//**todo refactor Simulation to class
+
+			let activeNodes = Ball.getActiveNodes();
+			simulate(activeNodes, cueForce, (cb) => { return Ball.updateModels(cb); }, (id) => {return Ball.updateNode(id)}, ()=>{
+					Cue.resume();
+					PowerGrid.resume();
+					const cueBallPosition = Ball.getCueBallPosition();
+					Cue.attachBall(cueBallPosition);
+					const cueAngle = Ball
 					.getCueBallPosition()
 					.subtract(Table.getMouseCoordinates())
 					.normalize().angleDeg();
-				Cue.updateRotation(cueAngle);
-		});
+					Cue.updateRotation(cueAngle);
+					});
+
+		}	
 	}
 
 	/*
