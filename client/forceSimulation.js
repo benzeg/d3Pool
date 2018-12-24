@@ -4,7 +4,7 @@ export default class ForceSimulation {
 	constructor() {
 		this.nodes = null;
 		this.events = {};
-		this.timeVec = new Victor(0.1, 0.1);
+		this.timeVec = new Victor(0.15, 0.15);
 		this.friction = new Victor(0.6, 0.6);
 		this.forceVec = {};
 		this.run = false;
