@@ -8,7 +8,6 @@ import * as d3 from 'd3';
 export default function controller(Table, PowerGrid, Ball, Cue) {
 	
 	const mouseEvt = function() {
-		event.preventDefault();
 		let position;
 
 		switch(event.type) {
@@ -18,6 +17,9 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 				   Event to trigger when mouse is moved around the game table.
 				   Calls on a chain of position calculation and update events to update cue position.
 				 */
+				if( event.type === 'touchmove' && event.touches.length > 1) return;
+				
+				event.preventDefault();
 				position = event.type === 'mousemove' ? d3.mouse(this): d3.touches(this)[0]; //only deal with a single touch input
 				Table.updateMousePosition(position);
 				if(Cue.rotate) {
@@ -40,7 +42,9 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 				 */
 				if(event.type === 'touchstart' && event.touches.length < 2) return;
 				if(event.type === 'mousedown' && event.which !== 1 ) return; //[1, 2, 3] = [left button, middle button, right button]
-				position = event.type === 'mousedown' ? d3.mouse(this): d3.touches(this)[0];
+			
+		event.preventDefault();
+	position = event.type === 'mousedown' ? d3.mouse(this): d3.touches(this)[0];
 				Table.updateMousePosition(position);	
 				Cue.setMousePosition(Table.getMouseCoordinates());
 				Cue.startAnimation();
@@ -51,12 +55,14 @@ export default function controller(Table, PowerGrid, Ball, Cue) {
 
 			case "mouseup":
 			case "touchend":
+			case "touchcancel":
 				/*
 				   Event to trigger when mouse is released following a charge
 				   Calls on a chain of position calculation and update events to update svg positions
 				 */
-				if(event.type === 'touchend' && event.touches.length !== 1) return;
+				if((event.type === 'touchend' || event.type === 'touchcancel') && event.touches.length !== 1) return;
 				if(event.type === 'mouseup' && event.which !== 1) return;
+				event.preventDefault();
 				Cue.pause();
 				PowerGrid.pause();
 
