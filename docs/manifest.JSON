@@ -17,7 +17,7 @@
   ],
   "start_url": "./?utm_source=a2hs",
   "background_color": "#252525",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "landscape",
   "scope": "/pool-2d/",
   "theme_color": "#252525"
