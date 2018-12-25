@@ -12,7 +12,7 @@
     "url": "git+https://github.com/benzeg/pool-2d.git"
   },
   "author": "Benze Gong",
-  "license": "ISC",
+  "license": "LGPL-3.0",
   "bugs": {
     "url": "https://github.com/benzeg/pool-2d/issues"
   },
