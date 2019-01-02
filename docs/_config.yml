@@ -16,7 +16,7 @@
 title: Pool
 description: A 2-D collision game.
 baseurl: # the subpath of your site, e.g. /blog
-url: https://benzeg.github.io/alexaunitconversion  # the base hostname & protocol for your site, e.g. http://example.com
+url: https://benzeg.github.io/pool-2d  # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: Benze_Gong
 github_username:  benzeg
 
