@@ -5,17 +5,17 @@
   "lang": "en-US",
   "icons": [
     {
-      "src": "./assets/icon-192.png",
+      "src": "./assets/icon-medium.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "./assets/icon-512.png",
+      "src": "./assets/icon-large.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "./?utm_source=a2hs",
+  "start_url": "/pool-2d/demo.html?utm_source=a2hs",
   "background_color": "#252525",
   "display": "standalone",
   "orientation": "landscape",
